@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 772 250" width="772" height="250">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+  </defs>
+  <rect width="772" height="250" fill="url(#bg)"/>
+
+  <!-- Decorative hexagon -->
+  <polygon points="100,50 140,28 180,50 180,94 140,116 100,94" fill="none" stroke="#4f46e5" stroke-width="3" opacity="0.5"/>
+  <circle cx="140" cy="72" r="10" fill="#4f46e5" opacity="0.6"/>
+
+  <!-- Title -->
+  <text x="220" y="120" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#f1f5f9">
+    HeadlessWP
+  </text>
+  <text x="220" y="158" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="#94a3b8">
+    by Kweku Jasper Media
+  </text>
+
+  <!-- Tagline -->
+  <text x="220" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748b">
+    WordPress → Headless CMS for Next.js · Nuxt · Astro · SvelteKit
+  </text>
+
+  <!-- Version badge -->
+  <rect x="600" y="108" width="140" height="34" rx="6" fill="#4f46e5"/>
+  <text x="670" y="130" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">
+    v1.0.1
+  </text>
+</svg>

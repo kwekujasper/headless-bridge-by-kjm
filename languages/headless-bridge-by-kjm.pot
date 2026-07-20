@@ -1,0 +1,732 @@
+# Copyright (C) 2026 Kweku Jasper Media
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Headless Bridge by KJM 1.2.4\n"
+"Report-Msgid-Bugs-To: https://kwekujasper.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: Headless Bridge POT Generator\n"
+"X-Domain: headless-bridge-by-kjm\n"
+
+#: templates/webhooks-tab.php:34
+msgid "\"Last Attempt\" instead shows the most recent time this webhook fired for real — e.g. when you actually published a post — and which event triggered it. It won't always show a pass/fail mark, because real triggers fire in the background without waiting to hear back; use \"Send Test\" if you want a definite yes/no."
+msgstr ""
+
+#: templates/webhooks-tab.php:31
+msgid "\"Send Test\" fires a one-off trial call right now, using sample data, and tells you immediately whether it succeeded or failed (with the reason). Use it after saving a webhook to confirm it's set up correctly."
+msgstr ""
+
+#: templates/admin-page.php:372
+msgid "%1$s — crafted by %2$s"
+msgstr ""
+
+#: includes/class-webhooks.php:91
+msgid "%s Published"
+msgstr ""
+
+#: includes/class-webhooks.php:101
+msgid "%s Unpublished / Trashed"
+msgstr ""
+
+#: includes/class-webhooks.php:96
+msgid "%s Updated"
+msgstr ""
+
+#: includes/class-admin.php:116
+#: templates/webhooks-tab.php:143
+msgid "(leave blank to keep the existing secret)"
+msgstr ""
+
+#: includes/class-admin.php:136
+msgid "<strong>Headless Bridge:</strong> Headless mode is active but no Frontend URL is configured. <a href=\"%s\">Configure now</a>."
+msgstr ""
+
+#: templates/webhooks-tab.php:145
+msgid "A shared password so only WordPress can trigger this webhook. Click Generate, then copy the value into your frontend's matching setting (e.g. REVALIDATE_SECRET)."
+msgstr ""
+
+#: templates/admin-page.php:19
+msgid "API & CORS"
+msgstr ""
+
+#: templates/webhooks-tab.php:46
+msgid "Actions"
+msgstr ""
+
+#: templates/webhooks-tab.php:98
+msgid "Add Custom Webhook"
+msgstr ""
+
+#: includes/class-admin.php:113
+#: templates/webhooks-tab.php:105
+msgid "Add New Webhook"
+msgstr ""
+
+#: templates/admin-page.php:180
+msgid "Add Noindex Header"
+msgstr ""
+
+#: templates/webhooks-tab.php:155
+msgid "Advanced: edit the payload template (optional)"
+msgstr ""
+
+#: templates/admin-page.php:241
+msgid "Allowed Origins"
+msgstr ""
+
+#: includes/class-admin.php:99
+msgid "An error occurred."
+msgstr ""
+
+#: templates/admin-page.php:134
+msgid "Append request path to frontend URL on redirect."
+msgstr ""
+
+#: includes/class-webhooks.php:109
+msgid "Author Profile Updated"
+msgstr ""
+
+#: templates/health-widget.php:18
+msgid "CORS Configuration"
+msgstr ""
+
+#: templates/admin-page.php:237
+msgid "CORS Settings"
+msgstr ""
+
+#: includes/class-admin.php:98
+#: includes/class-health.php:116
+msgid "Cache cleared."
+msgstr ""
+
+#: includes/class-admin.php:115
+#: templates/admin-page.php:356
+#: templates/webhooks-tab.php:175
+msgid "Cancel"
+msgstr ""
+
+#: includes/class-webhooks.php:106
+msgid "Category Created"
+msgstr ""
+
+#: includes/class-webhooks.php:108
+msgid "Category Deleted"
+msgstr ""
+
+#: includes/class-webhooks.php:107
+msgid "Category Updated"
+msgstr ""
+
+#: includes/class-admin.php:92
+msgid "Checking…"
+msgstr ""
+
+#: includes/class-admin.php:97
+#: templates/admin-page.php:272
+msgid "Clear Cache"
+msgstr ""
+
+#: includes/class-webhooks.php:110
+msgid "Comment Posted (approved)"
+msgstr ""
+
+#: templates/admin-page.php:348
+msgid "Confirm Reset"
+msgstr ""
+
+#: templates/admin-page.php:124
+msgid "Controls how the frontend serves images. Native uses the hosting platform's built-in optimizer (Vercel/Cloudflare/etc. — today's default). Sharp routes images through the frontend's own resizer and only works if it's running on a plain Node.js server (not Vercel/Cloudflare Workers edge functions). Free proxy routes images through the free wsrv.nl image proxy instead. Unoptimized serves original files with no resizing or format conversion. Takes effect on the frontend's next cache refresh — no redeploy needed."
+msgstr ""
+
+#: includes/class-admin.php:102
+#: templates/webhooks-tab.php:87
+msgid "Delete"
+msgstr ""
+
+#: includes/class-admin.php:104
+msgid "Delete this webhook? This cannot be undone."
+msgstr ""
+
+#: includes/class-admin.php:103
+msgid "Deleting…"
+msgstr ""
+
+#: templates/admin-page.php:214
+msgid "Disable Author Archives"
+msgstr ""
+
+#: templates/admin-page.php:213
+msgid "Disable Comments"
+msgstr ""
+
+#: templates/admin-page.php:215
+msgid "Disable Date Archives"
+msgstr ""
+
+#: templates/admin-page.php:212
+msgid "Disable Frontend Search"
+msgstr ""
+
+#: templates/admin-page.php:211
+msgid "Disable RSS / Feeds"
+msgstr ""
+
+#: templates/admin-page.php:311
+msgid "Download all plugin settings as a JSON file."
+msgstr ""
+
+#: templates/webhooks-tab.php:85
+msgid "Edit"
+msgstr ""
+
+#: includes/class-admin.php:114
+msgid "Edit Webhook"
+msgstr ""
+
+#: templates/admin-page.php:225
+msgid "Enable"
+msgstr ""
+
+#: templates/admin-page.php:81
+msgid "Enable Headless Mode"
+msgstr ""
+
+#: templates/webhooks-tab.php:44
+#: templates/webhooks-tab.php:162
+msgid "Enabled"
+msgstr ""
+
+#: includes/class-webhooks.php:474
+msgid "Enter a valid webhook URL."
+msgstr ""
+
+#: templates/admin-page.php:350
+msgid "Enter your account password to confirm:"
+msgstr ""
+
+#: templates/webhooks-tab.php:157
+msgid "Every trigger provides {{type}} and {{slug}}, plus extras like {{post_title}} or {{post_url}}. Tags already include quotes — write \"slug\":{{slug}}, not \"slug\":\"{{slug}}\"."
+msgstr ""
+
+#: templates/admin-page.php:136
+msgid "Example: /my-post on WordPress redirects to plus233.com/my-post"
+msgstr ""
+
+#: templates/admin-page.php:310
+#: templates/admin-page.php:315
+msgid "Export Settings"
+msgstr ""
+
+#: includes/class-admin.php:95
+#: templates/health-widget.php:36
+msgid "Fail"
+msgstr ""
+
+#: includes/class-admin.php:108
+msgid "Failed"
+msgstr ""
+
+#: templates/admin-page.php:18
+msgid "Features"
+msgstr ""
+
+#: includes/class-api.php:70
+msgid "Feed Disabled"
+msgstr ""
+
+#: includes/class-api.php:69
+msgid "Feed not available. Please visit our website."
+msgstr ""
+
+#: templates/admin-page.php:300
+#: templates/admin-page.php:305
+msgid "Flush Permalinks"
+msgstr ""
+
+#: templates/admin-page.php:112
+msgid "Free proxy (wsrv.nl)"
+msgstr ""
+
+#: templates/health-widget.php:17
+msgid "Frontend Reachability"
+msgstr ""
+
+#: includes/class-admin.php:118
+#: templates/webhooks-tab.php:113
+msgid "Frontend Revalidation"
+msgstr ""
+
+#: templates/maintenance.php:70
+msgid "Frontend Temporarily Unavailable"
+msgstr ""
+
+#: templates/admin-page.php:93
+msgid "Frontend URL"
+msgstr ""
+
+#: includes/class-graphql.php:51
+msgid "Frontend image optimization strategy: \"native\", \"sharp\" (self-hosted Node.js resizer), \"proxy\" (wsrv.nl), or \"unoptimized\"."
+msgstr ""
+
+#: includes/class-redirects.php:173
+msgid "Frontend temporarily unavailable. Please try again later."
+msgstr ""
+
+#: templates/admin-page.php:16
+msgid "General"
+msgstr ""
+
+#: includes/class-admin.php:109
+#: templates/webhooks-tab.php:141
+msgid "Generate"
+msgstr ""
+
+#: includes/class-admin.php:110
+msgid "Generating…"
+msgstr ""
+
+#: templates/health-widget.php:16
+msgid "GraphQL Endpoint"
+msgstr ""
+
+#: includes/class-webhooks.php:820
+msgid "HTTP %1$d: %2$s"
+msgstr ""
+
+#: includes/class-webhooks.php:814
+msgid "HTTP %d"
+msgstr ""
+
+#: templates/admin-page.php:252
+msgid "Headers sent for allowed origins:"
+msgstr ""
+
+#: templates/admin-page.php:58
+msgid "Headless Active"
+msgstr ""
+
+#: includes/class-admin.php:44
+msgid "Headless Bridge"
+msgstr ""
+
+#: includes/class-admin.php:43
+msgid "Headless Bridge Settings"
+msgstr ""
+
+#: includes/class-health.php:47
+msgid "Headless Bridge Status"
+msgstr ""
+
+#: templates/admin-page.php:55
+msgid "Headless Bridge by KJM"
+msgstr ""
+
+#: includes/class-health.php:226
+msgid "Headless Bridge v%s active."
+msgstr ""
+
+#: templates/admin-page.php:60
+msgid "Headless Inactive"
+msgstr ""
+
+#: templates/admin-page.php:21
+msgid "Health"
+msgstr ""
+
+#: templates/admin-page.php:266
+msgid "Health checks verify that WordPress API endpoints and your frontend are reachable. Results are cached for 5 minutes."
+msgstr ""
+
+#: includes/class-admin.php:112
+msgid "Hide"
+msgstr ""
+
+#: templates/admin-page.php:104
+msgid "Image Optimization"
+msgstr ""
+
+#: templates/admin-page.php:320
+#: templates/admin-page.php:326
+msgid "Import Settings"
+msgstr ""
+
+#: templates/admin-page.php:33
+msgid "Import failed. Please upload a valid Headless Bridge JSON file."
+msgstr ""
+
+#: templates/admin-page.php:334
+msgid "Incorrect password. Settings were not reset."
+msgstr ""
+
+#: includes/class-admin.php:96
+#: templates/health-widget.php:40
+msgid "Info"
+msgstr ""
+
+#: templates/admin-page.php:167
+msgid "Keep XML-RPC enabled (recommended for Jetpack / mobile apps)."
+msgstr ""
+
+#: templates/webhooks-tab.php:45
+msgid "Last Attempt"
+msgstr ""
+
+#: templates/health-widget.php:58
+msgid "Last checked: %s"
+msgstr ""
+
+#: templates/admin-page.php:151
+msgid "Maintenance Mode"
+msgstr ""
+
+#: templates/webhooks-tab.php:41
+#: templates/webhooks-tab.php:111
+msgid "Name"
+msgstr ""
+
+#: templates/admin-page.php:110
+msgid "Native (platform optimizer — default)"
+msgstr ""
+
+#: templates/webhooks-tab.php:71
+msgid "Never fired"
+msgstr ""
+
+#: templates/webhooks-tab.php:68
+msgid "No"
+msgstr ""
+
+#: includes/class-health.php:196
+#: templates/admin-page.php:295
+msgid "No frontend URL configured."
+msgstr ""
+
+#: includes/class-health.php:212
+msgid "No origins configured."
+msgstr ""
+
+#: templates/webhooks-tab.php:52
+msgid "No webhooks configured yet."
+msgstr ""
+
+#: templates/webhooks-tab.php:101
+msgid "Not sure which to pick? \"Quick Setup\" is for the common case — telling your Next.js/Nuxt/etc. frontend to refresh whenever content changes. It fills in everything except your frontend URL and secret. \"Add Custom Webhook\" is for anything else (Slack, Zapier, a different service)."
+msgstr ""
+
+#: templates/admin-page.php:247
+msgid "One URL per line. These domains will receive Access-Control-Allow-Origin headers. Enter * on its own line to allow all origins (not recommended for production)."
+msgstr ""
+
+#: templates/admin-page.php:292
+msgid "Open Frontend"
+msgstr ""
+
+#: templates/admin-page.php:288
+msgid "Open your configured frontend URL in a new tab."
+msgstr ""
+
+#: templates/admin-page.php:147
+msgid "Optional path segment prepended to single-post redirects. Leave blank to redirect straight to the frontend root (e.g. plus233.com/my-post). Set to \"post\" to redirect to plus233.com/post/my-post instead. Only applies when Preserve Slugs is enabled."
+msgstr ""
+
+#: templates/admin-page.php:191
+msgid "Override robots.txt"
+msgstr ""
+
+#: includes/class-admin.php:94
+#: templates/health-widget.php:32
+msgid "Pass"
+msgstr ""
+
+#: includes/class-graphql.php:41
+msgid "Path segment Headless Bridge prepends to single-post redirects (e.g. \"post\"), or empty for root-level post URLs."
+msgstr ""
+
+#: templates/webhooks-tab.php:149
+msgid "Payload"
+msgstr ""
+
+#: includes/class-webhooks.php:349
+msgid "Payload template did not render to valid JSON."
+msgstr ""
+
+#: includes/class-webhooks.php:479
+msgid "Payload template is required."
+msgstr ""
+
+#: includes/class-webhooks.php:490
+msgid "Payload template must render to valid JSON for every selected trigger. Tags already include quotes — write \"slug\":{{slug}}, not \"slug\":\"{{slug}}\"."
+msgstr ""
+
+#: templates/admin-page.php:27
+msgid "Permalink structure flushed."
+msgstr ""
+
+#: includes/class-admin.php:180
+#: includes/class-admin.php:195
+#: includes/class-admin.php:239
+#: includes/class-admin.php:293
+#: includes/class-health.php:99
+#: includes/class-health.php:112
+#: includes/class-webhooks.php:713
+#: includes/class-webhooks.php:738
+#: includes/class-webhooks.php:753
+#: includes/class-webhooks.php:770
+#: includes/class-webhooks.php:830
+msgid "Permission denied."
+msgstr ""
+
+#: templates/admin-page.php:353
+msgid "Please enter your password."
+msgstr ""
+
+#: templates/health-widget.php:19
+msgid "Plugin Status"
+msgstr ""
+
+#: templates/admin-page.php:141
+msgid "Post Path Prefix"
+msgstr ""
+
+#: templates/admin-page.php:129
+msgid "Preserve Slugs"
+msgstr ""
+
+#: templates/admin-page.php:187
+msgid "Prevents search engines from indexing the WordPress backend URL, since content is served by the frontend."
+msgstr ""
+
+#: templates/webhooks-tab.php:97
+msgid "Quick Setup: Revalidate My Frontend"
+msgstr ""
+
+#: templates/admin-page.php:88
+msgid "Redirect all frontend requests to the external frontend. API, admin, and AJAX endpoints are always preserved."
+msgstr ""
+
+#: templates/admin-page.php:301
+msgid "Regenerate WordPress rewrite rules. Run after changing settings."
+msgstr ""
+
+#: templates/admin-page.php:196
+msgid "Replace WordPress robots.txt with \"Disallow: /\" and a sitemap pointer to the frontend."
+msgstr ""
+
+#: templates/admin-page.php:331
+#: templates/admin-page.php:341
+#: templates/admin-page.php:357
+msgid "Reset Settings"
+msgstr ""
+
+#: templates/admin-page.php:332
+msgid "Restore all Headless Bridge settings to their factory defaults. This cannot be undone."
+msgstr ""
+
+#: includes/class-admin.php:93
+#: templates/admin-page.php:269
+msgid "Run Check"
+msgstr ""
+
+#: templates/admin-page.php:17
+msgid "SEO"
+msgstr ""
+
+#: templates/admin-page.php:258
+msgid "Save CORS Settings"
+msgstr ""
+
+#: templates/admin-page.php:231
+msgid "Save Feature Settings"
+msgstr ""
+
+#: templates/admin-page.php:172
+msgid "Save General Settings"
+msgstr ""
+
+#: templates/admin-page.php:201
+msgid "Save SEO Settings"
+msgstr ""
+
+#: includes/class-admin.php:100
+#: templates/webhooks-tab.php:174
+msgid "Save Webhook"
+msgstr ""
+
+#: includes/class-admin.php:101
+msgid "Saving…"
+msgstr ""
+
+#: templates/webhooks-tab.php:137
+msgid "Secret"
+msgstr ""
+
+#: includes/class-admin.php:117
+#: includes/class-webhooks.php:469
+msgid "Select at least one trigger."
+msgstr ""
+
+#: includes/class-admin.php:105
+#: templates/webhooks-tab.php:86
+msgid "Send Test"
+msgstr ""
+
+#: templates/admin-page.php:185
+msgid "Send X-Robots-Tag: noindex, nofollow on all WordPress responses."
+msgstr ""
+
+#: includes/class-admin.php:106
+msgid "Sending…"
+msgstr ""
+
+#: includes/class-webhooks.php:781
+msgid "Set a secret before testing."
+msgstr ""
+
+#: includes/class-admin.php:151
+msgid "Settings"
+msgstr ""
+
+#: templates/admin-page.php:36
+msgid "Settings have been reset to defaults."
+msgstr ""
+
+#: templates/admin-page.php:30
+msgid "Settings imported successfully."
+msgstr ""
+
+#: templates/admin-page.php:39
+msgid "Settings saved."
+msgstr ""
+
+#: templates/admin-page.php:111
+msgid "Sharp (self-hosted, Node.js only)"
+msgstr ""
+
+#: includes/class-admin.php:111
+#: templates/webhooks-tab.php:140
+msgid "Show"
+msgstr ""
+
+#: templates/admin-page.php:156
+msgid "Show maintenance page instead of redirecting."
+msgstr ""
+
+#: includes/class-webhooks.php:111
+msgid "Site Settings Updated"
+msgstr ""
+
+#: templates/maintenance.php:8
+msgid "Site Temporarily Unavailable"
+msgstr ""
+
+#: includes/class-admin.php:107
+msgid "Success"
+msgstr ""
+
+#: templates/admin-page.php:287
+msgid "Test Frontend"
+msgstr ""
+
+#: templates/maintenance.php:72
+msgid "Thank you for your patience."
+msgstr ""
+
+#: templates/webhooks-tab.php:152
+msgid "The \"payload\" is just the message this webhook sends — a small block of text describing what changed. You do not need to understand it: the default below already works for revalidating a Next.js/Nuxt/etc. frontend. Only open \"Advanced\" if you’re sending to something else (like Slack) that expects a different message format."
+msgstr ""
+
+#: templates/admin-page.php:99
+msgid "The URL of your Next.js, Nuxt, Astro, or other frontend. Example: https://plus233.com"
+msgstr ""
+
+#: templates/admin-page.php:207
+msgid "These toggles are applied only when Headless Mode is active."
+msgstr ""
+
+#: includes/class-webhooks.php:786
+msgid "This webhook has no triggers configured."
+msgstr ""
+
+#: templates/admin-page.php:349
+msgid "This will restore all Headless Bridge settings — including every configured webhook — to their factory defaults. This cannot be undone."
+msgstr ""
+
+#: templates/admin-page.php:22
+msgid "Tools"
+msgstr ""
+
+#: templates/webhooks-tab.php:42
+#: templates/webhooks-tab.php:117
+msgid "Triggers"
+msgstr ""
+
+#: templates/webhooks-tab.php:43
+#: templates/webhooks-tab.php:130
+msgid "URL"
+msgstr ""
+
+#: templates/admin-page.php:113
+msgid "Unoptimized (serve original files)"
+msgstr ""
+
+#: templates/admin-page.php:321
+msgid "Upload a Headless Bridge JSON settings file to restore settings."
+msgstr ""
+
+#: templates/admin-page.php:158
+msgid "Use when your frontend is temporarily down to avoid redirect loops."
+msgstr ""
+
+#: includes/class-health.php:173
+msgid "WPGraphQL plugin not active."
+msgstr ""
+
+#: templates/maintenance.php:71
+msgid "We're making improvements to bring you a better experience. We'll be back online very soon."
+msgstr ""
+
+#: includes/class-webhooks.php:461
+msgid "Webhook name is required."
+msgstr ""
+
+#: includes/class-webhooks.php:743
+#: includes/class-webhooks.php:760
+#: includes/class-webhooks.php:777
+msgid "Webhook not found."
+msgstr ""
+
+#: templates/admin-page.php:20
+msgid "Webhooks"
+msgstr ""
+
+#: templates/webhooks-tab.php:28
+msgid "What \"Send Test\" and \"Last Attempt\" mean:"
+msgstr ""
+
+#: templates/webhooks-tab.php:24
+msgid "Wire WordPress content events (post published, category changed, and more) to any outbound webhook — your Next.js frontend, Slack, Zapier, or anything else that accepts a POST request. A single webhook can be attached to multiple triggers."
+msgstr ""
+
+#: templates/health-widget.php:15
+msgid "WordPress REST API"
+msgstr ""
+
+#: templates/admin-page.php:162
+msgid "XML-RPC"
+msgstr ""
+
+#: templates/webhooks-tab.php:68
+msgid "Yes"
+msgstr ""
+
+#: includes/class-health.php:216
+msgid "%d origin configured."
+msgid_plural "%d origins configured."
+msgstr[0] ""
+msgstr[1] ""
+

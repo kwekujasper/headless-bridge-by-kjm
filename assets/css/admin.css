@@ -1,0 +1,381 @@
+/* HeadlessBridge Admin Styles */
+
+/* ── Variables ─────────────────────────────────────────────────── */
+:root {
+	--kjm-primary:    #4f46e5;
+	--kjm-primary-h:  #4338ca;
+	--kjm-success:    #16a34a;
+	--kjm-danger:     #dc2626;
+	--kjm-warning:    #d97706;
+	--kjm-info:       #0369a1;
+	--kjm-bg:         #f8fafc;
+	--kjm-border:     #e2e8f0;
+	--kjm-text:       #1e293b;
+	--kjm-muted:      #64748b;
+	--kjm-card-bg:    #ffffff;
+	--kjm-radius:     8px;
+}
+
+/* ── Page wrapper ──────────────────────────────────────────────── */
+.headlessbridge-wrap {
+	max-width: 900px;
+}
+
+/* ── Header ────────────────────────────────────────────────────── */
+.headlessbridge-header {
+	background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+	border-radius: var(--kjm-radius);
+	margin-bottom: 0;
+	padding: 20px 24px;
+}
+
+.headlessbridge-header-inner {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.headlessbridge-header h1 {
+	color: #f1f5f9;
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+}
+
+.headlessbridge-logo {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.headlessbridge-version {
+	color: #94a3b8;
+	font-size: 0.8rem;
+	margin-top: 2px;
+}
+
+/* ── Active/inactive badge ─────────────────────────────────────── */
+.headlessbridge-badge {
+	display: inline-block;
+	padding: 3px 10px;
+	border-radius: 999px;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.headlessbridge-badge--active {
+	background: #16a34a;
+	color: #fff;
+}
+
+.headlessbridge-badge--inactive {
+	background: #64748b;
+	color: #fff;
+}
+
+/* ── Tabs ──────────────────────────────────────────────────────── */
+.headlessbridge-nav-tab-wrapper {
+	border-bottom: 1px solid var(--kjm-border);
+	margin-bottom: 0 !important;
+	padding-top: 0;
+}
+
+.headlessbridge-nav-tab-wrapper .nav-tab {
+	border-bottom: none;
+	margin-bottom: -1px;
+}
+
+.headlessbridge-nav-tab-wrapper .nav-tab-active {
+	border-bottom: 2px solid var(--kjm-primary);
+	color: var(--kjm-primary);
+}
+
+/* ── Tab content ───────────────────────────────────────────────── */
+.headlessbridge-tab-content {
+	background: var(--kjm-card-bg);
+	border: 1px solid var(--kjm-border);
+	border-top: none;
+	border-radius: 0 0 var(--kjm-radius) var(--kjm-radius);
+	padding: 24px;
+}
+
+/* ── Toggle switch ─────────────────────────────────────────────── */
+.headlessbridge-toggle {
+	position: relative;
+	display: inline-block;
+	width: 48px;
+	height: 26px;
+	vertical-align: middle;
+}
+
+.headlessbridge-toggle input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.headlessbridge-toggle__slider {
+	position: absolute;
+	cursor: pointer;
+	inset: 0;
+	background: #cbd5e1;
+	border-radius: 999px;
+	transition: background 0.2s;
+}
+
+.headlessbridge-toggle__slider::before {
+	content: '';
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	left: 4px;
+	top: 4px;
+	background: #fff;
+	border-radius: 50%;
+	transition: transform 0.2s;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.headlessbridge-toggle input:checked + .headlessbridge-toggle__slider {
+	background: var(--kjm-primary);
+}
+
+.headlessbridge-toggle input:checked + .headlessbridge-toggle__slider::before {
+	transform: translateX(22px);
+}
+
+.headlessbridge-toggle input:focus + .headlessbridge-toggle__slider {
+	outline: 2px solid var(--kjm-primary);
+	outline-offset: 2px;
+}
+
+/* ── Info box ──────────────────────────────────────────────────── */
+.headlessbridge-info-box {
+	background: #f0f4ff;
+	border: 1px solid #c7d2fe;
+	border-radius: var(--kjm-radius);
+	padding: 16px 20px;
+	margin: 16px 0;
+}
+
+.headlessbridge-info-box pre {
+	margin: 8px 0 0;
+	font-size: 0.82rem;
+	color: #3730a3;
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+/* ── Health grid ───────────────────────────────────────────────── */
+.headlessbridge-health-grid {
+	display: grid;
+	gap: 12px;
+	margin-bottom: 16px;
+}
+
+.headlessbridge-health-item {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	grid-template-rows: auto auto;
+	gap: 2px 12px;
+	background: var(--kjm-bg);
+	border: 1px solid var(--kjm-border);
+	border-radius: var(--kjm-radius);
+	padding: 12px 16px;
+}
+
+.headlessbridge-health-label {
+	font-weight: 600;
+	color: var(--kjm-text);
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.headlessbridge-health-status {
+	grid-column: 2;
+	grid-row: 1;
+	font-size: 0.8rem;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 10px;
+	border-radius: 999px;
+}
+
+.headlessbridge-status--pass  { background: #dcfce7; color: var(--kjm-success); }
+.headlessbridge-status--fail  { background: #fee2e2; color: var(--kjm-danger);  }
+.headlessbridge-status--info  { background: #e0f2fe; color: var(--kjm-info);    }
+
+.headlessbridge-health-detail {
+	grid-column: 1 / -1;
+	grid-row: 2;
+	font-size: 0.8rem;
+	color: var(--kjm-muted);
+}
+
+.headlessbridge-health-timestamp {
+	color: var(--kjm-muted);
+	font-size: 0.78rem;
+	margin-top: 4px;
+}
+
+/* ── Tools grid ────────────────────────────────────────────────── */
+.headlessbridge-tools {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 16px;
+}
+
+.headlessbridge-tool-card {
+	background: var(--kjm-bg);
+	border: 1px solid var(--kjm-border);
+	border-radius: var(--kjm-radius);
+	padding: 20px;
+}
+
+.headlessbridge-tool-card h3 {
+	font-size: 1rem;
+	font-weight: 600;
+	margin: 0 0 8px;
+	color: var(--kjm-text);
+}
+
+.headlessbridge-tool-card p {
+	font-size: 0.85rem;
+	color: var(--kjm-muted);
+	margin-bottom: 12px;
+}
+
+.headlessbridge-tool-card--danger {
+	border-color: #fecaca;
+	background: #fff5f5;
+}
+
+/* ── Footer ────────────────────────────────────────────────────── */
+.headlessbridge-footer {
+	margin-top: 20px;
+	padding: 12px 0;
+	border-top: 1px solid var(--kjm-border);
+	font-size: 0.82rem;
+	color: var(--kjm-muted);
+	text-align: center;
+}
+
+.headlessbridge-footer a {
+	color: var(--kjm-primary);
+}
+
+/* ── Webhooks ──────────────────────────────────────────────────── */
+.headlessbridge-webhooks-table {
+	margin-bottom: 20px;
+}
+
+.headlessbridge-webhooks-table .headlessbridge-webhooks-url {
+	max-width: 260px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.headlessbridge-webhooks-empty td {
+	color: var(--kjm-muted);
+	font-style: italic;
+}
+
+.headlessbridge-webhook-test-result {
+	margin-top: 4px;
+	font-size: 0.8rem;
+}
+
+.headlessbridge-webhook-form-wrap {
+	background: var(--kjm-bg);
+	border: 1px solid var(--kjm-border);
+	border-radius: var(--kjm-radius);
+	padding: 20px 24px;
+	margin-top: 12px;
+}
+
+.headlessbridge-trigger-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 8px 16px;
+}
+
+.headlessbridge-webhook-form-error {
+	color: var(--kjm-danger);
+	font-weight: 600;
+}
+
+.headlessbridge-payload-advanced summary {
+	cursor: pointer;
+	color: var(--kjm-primary);
+	font-weight: 600;
+	margin-bottom: 8px;
+}
+
+.headlessbridge-payload-advanced textarea {
+	margin-top: 8px;
+}
+
+/* ── Modal ─────────────────────────────────────────────────────── */
+.headlessbridge-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(15, 23, 42, 0.6);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100000;
+}
+
+.headlessbridge-modal {
+	background: var(--kjm-card-bg);
+	border-radius: var(--kjm-radius);
+	padding: 24px 28px;
+	max-width: 420px;
+	width: 90%;
+	box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.headlessbridge-modal h3 {
+	margin-top: 0;
+}
+
+.headlessbridge-modal label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: 600;
+}
+
+.headlessbridge-modal input[type="password"] {
+	width: 100%;
+	margin-bottom: 8px;
+}
+
+.headlessbridge-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 16px;
+	margin-bottom: 0;
+}
+
+.headlessbridge-modal-danger {
+	background: var(--kjm-danger) !important;
+	border-color: var(--kjm-danger) !important;
+}
+
+/* ── Dashboard widget ──────────────────────────────────────────── */
+#headlessbridge_health_widget .headlessbridge-health-grid {
+	gap: 8px;
+}
+
+#headlessbridge_health_widget .headlessbridge-health-item {
+	padding: 8px 12px;
+}

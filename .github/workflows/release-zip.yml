@@ -1,0 +1,47 @@
+name: Build release zip
+
+# Runs on every version tag (e.g. v1.2.0) and attaches a clean, installable
+# plugin zip to a GitHub Release. This works immediately with no extra setup
+# — no secrets required — and is what to use for the initial WordPress.org
+# submission (upload the resulting zip at wordpress.org/plugins/developers/add/)
+# or for distributing the plugin outside WordPress.org entirely.
+#
+# Cut a release with: git tag v1.2.0 && git push --tags
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # The default GITHUB_TOKEN is read-only; creating a release needs write.
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read plugin slug and version
+        id: plugin
+        run: |
+          echo "slug=headless-bridge-by-kjm" >> "$GITHUB_OUTPUT"
+          echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      # Copies the repo into a folder literally named "headless-bridge-by-kjm"
+      # (matching the plugin's text domain / WordPress.org slug), stripping
+      # everything listed in .distignore, then zips that folder — so the
+      # zip's top-level directory is what WordPress expects on extraction.
+      - name: Build clean plugin folder
+        run: |
+          mkdir -p build/${{ steps.plugin.outputs.slug }}
+          rsync -a --exclude-from='.distignore' ./ build/${{ steps.plugin.outputs.slug }}/
+          cd build
+          zip -r ../${{ steps.plugin.outputs.slug }}-${{ steps.plugin.outputs.version }}.zip ${{ steps.plugin.outputs.slug }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.plugin.outputs.slug }}-${{ steps.plugin.outputs.version }}.zip
+          generate_release_notes: true

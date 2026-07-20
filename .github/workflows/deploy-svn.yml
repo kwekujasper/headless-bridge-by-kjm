@@ -1,0 +1,35 @@
+name: Deploy to WordPress.org
+
+# Syncs a tagged release to the WordPress.org plugin SVN repository.
+#
+# PREREQUISITE — do not push a tag expecting this to work until both are true:
+#   1. This plugin has been submitted and APPROVED at
+#      wordpress.org/plugins/developers/add/ (see release-zip.yml for
+#      building the zip to submit). WordPress.org only grants SVN access
+#      after that manual review — nothing here can skip that step.
+#   2. Two repository secrets are set (GitHub repo → Settings → Secrets
+#      and variables → Actions): SVN_USERNAME and SVN_PASSWORD, using the
+#      WordPress.org account that was granted commit access.
+#
+# Until both are true, this workflow will simply fail on every tag push —
+# harmless (nothing gets deployed), but expect a red X in the Actions tab.
+# Once set up, releasing is just: git tag v1.2.0 && git push --tags
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: headless-bridge-by-kjm
