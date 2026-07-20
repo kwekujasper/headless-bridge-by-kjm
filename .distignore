@@ -2,6 +2,7 @@
 .github
 .gitignore
 .distignore
+README.md
 tests
 phpunit.xml
 phpunit.xml.dist
