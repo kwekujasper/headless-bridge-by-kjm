@@ -16,6 +16,7 @@ $option_keys = [
 	'headlessbridge_frontend_url',
 	'headlessbridge_noindex',
 	'headlessbridge_preserve_slugs',
+	'headlessbridge_post_path_prefix',
 	'headlessbridge_disable_rss',
 	'headlessbridge_disable_search',
 	'headlessbridge_disable_comments',
