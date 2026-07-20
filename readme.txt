@@ -1,5 +1,5 @@
 === Headless Bridge by KJM ===
-Contributors: Kweku Jasper Media
+Contributors: kwekujasper
 Tags: headless, rest-api, graphql, cors, redirect
 Requires at least: 6.5
 Tested up to: 7.0
