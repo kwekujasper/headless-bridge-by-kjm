@@ -11,6 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// This is an included template — its top-level variables are locals scoped
+// to the calling method, not real WordPress globals.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+
 $check_labels = [
 	'wp_api'   => __( 'WordPress REST API', 'headless-bridge-by-kjm' ),
 	'graphql'  => __( 'GraphQL Endpoint', 'headless-bridge-by-kjm' ),

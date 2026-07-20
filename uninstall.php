@@ -11,6 +11,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+// This script runs standalone (WordPress requires it, it doesn't include
+// it into another scope), so its top-level variables aren't real globals.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+
 $option_keys = [
 	'headlessbridge_enabled',
 	'headlessbridge_frontend_url',

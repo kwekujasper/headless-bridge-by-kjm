@@ -16,6 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// This is an included template — its top-level variables are locals scoped
+// to the calling method, not real WordPress globals.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+
 $all_triggers = $webhooks->get_triggers();
 $records      = $webhooks->get_all();
 ?>
