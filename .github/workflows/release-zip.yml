@@ -33,12 +33,15 @@ jobs:
       # (matching the plugin's text domain / WordPress.org slug), stripping
       # everything listed in .distignore, then zips that folder — so the
       # zip's top-level directory is what WordPress expects on extraction.
+      # The build folder lives outside the checkout (under RUNNER_TEMP) so
+      # rsync's "./" source never includes its own destination.
       - name: Build clean plugin folder
         run: |
-          mkdir -p build/${{ steps.plugin.outputs.slug }}
-          rsync -a --exclude-from='.distignore' ./ build/${{ steps.plugin.outputs.slug }}/
-          cd build
-          zip -r ../${{ steps.plugin.outputs.slug }}-${{ steps.plugin.outputs.version }}.zip ${{ steps.plugin.outputs.slug }}
+          BUILD_DIR="$RUNNER_TEMP/build"
+          mkdir -p "$BUILD_DIR/${{ steps.plugin.outputs.slug }}"
+          rsync -a --exclude-from='.distignore' ./ "$BUILD_DIR/${{ steps.plugin.outputs.slug }}/"
+          cd "$BUILD_DIR"
+          zip -r "$GITHUB_WORKSPACE/${{ steps.plugin.outputs.slug }}-${{ steps.plugin.outputs.version }}.zip" ${{ steps.plugin.outputs.slug }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
