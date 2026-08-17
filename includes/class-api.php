@@ -2,10 +2,10 @@
 /**
  * Handles optional WordPress feature disabling (RSS, search, comments, archives).
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -25,7 +25,7 @@ class Api {
 			return;
 		}
 
-		if ( $this->settings->is_enabled( 'headlessbridge_disable_rss' ) ) {
+		if ( $this->settings->is_enabled( 'kjmhcg_disable_rss' ) ) {
 			add_action( 'do_feed',        [ $this, 'disable_feed' ], 1 );
 			add_action( 'do_feed_rdf',    [ $this, 'disable_feed' ], 1 );
 			add_action( 'do_feed_rss',    [ $this, 'disable_feed' ], 1 );
@@ -37,12 +37,12 @@ class Api {
 			remove_action( 'wp_head', 'feed_links_extra', 3 );
 		}
 
-		if ( $this->settings->is_enabled( 'headlessbridge_disable_search' ) ) {
+		if ( $this->settings->is_enabled( 'kjmhcg_disable_search' ) ) {
 			add_action( 'parse_query', [ $this, 'disable_search' ] );
 			add_filter( 'get_search_form', '__return_empty_string' );
 		}
 
-		if ( $this->settings->is_enabled( 'headlessbridge_disable_comments' ) ) {
+		if ( $this->settings->is_enabled( 'kjmhcg_disable_comments' ) ) {
 			add_filter( 'comments_open',          '__return_false', 20 );
 			add_filter( 'pings_open',             '__return_false', 20 );
 			add_filter( 'comments_array',         '__return_empty_array', 10 );
@@ -52,11 +52,11 @@ class Api {
 			remove_action( 'wp_head', 'wp_generator' );
 		}
 
-		if ( $this->settings->is_enabled( 'headlessbridge_disable_author_archives' ) ) {
+		if ( $this->settings->is_enabled( 'kjmhcg_disable_author_archives' ) ) {
 			add_action( 'template_redirect', [ $this, 'disable_author_archive' ], 2 );
 		}
 
-		if ( $this->settings->is_enabled( 'headlessbridge_disable_date_archives' ) ) {
+		if ( $this->settings->is_enabled( 'kjmhcg_disable_date_archives' ) ) {
 			add_action( 'template_redirect', [ $this, 'disable_date_archive' ], 2 );
 		}
 	}
@@ -66,8 +66,8 @@ class Api {
 	 */
 	public function disable_feed(): void {
 		wp_die(
-			esc_html__( 'Feed not available. Please visit our website.', 'headless-bridge-by-kjm' ),
-			esc_html__( 'Feed Disabled', 'headless-bridge-by-kjm' ),
+			esc_html__( 'Feed not available. Please visit our website.', 'kjm-headless-cms-gateway' ),
+			esc_html__( 'Feed Disabled', 'kjm-headless-cms-gateway' ),
 			[ 'response' => 403 ]
 		);
 	}

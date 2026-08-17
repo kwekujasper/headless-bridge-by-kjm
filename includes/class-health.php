@@ -2,10 +2,10 @@
 /**
  * Health checker — verifies that API endpoints and the frontend are reachable.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -15,12 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Health
  *
  * Runs connection checks and exposes results via an admin dashboard widget
- * and a REST endpoint at /wp-json/headlessbridge/v1/health.
+ * and a REST endpoint at /wp-json/kjmhcg/v1/health.
  */
 class Health {
 
 	/** Cache key for transient storage of health results. */
-	private const CACHE_KEY = 'headlessbridge_health_cache';
+	private const CACHE_KEY = 'kjmhcg_health_cache';
 
 	/** Cache duration in seconds. */
 	private const CACHE_TTL = 300;
@@ -30,8 +30,8 @@ class Health {
 	public function register_hooks(): void {
 		add_action( 'wp_dashboard_setup', [ $this, 'register_dashboard_widget' ] );
 		add_action( 'rest_api_init',      [ $this, 'register_rest_route' ] );
-		add_action( 'wp_ajax_headlessbridge_health_check', [ $this, 'ajax_health_check' ] );
-		add_action( 'wp_ajax_headlessbridge_clear_health_cache', [ $this, 'ajax_clear_cache' ] );
+		add_action( 'wp_ajax_kjmhcg_health_check', [ $this, 'ajax_health_check' ] );
+		add_action( 'wp_ajax_kjmhcg_clear_health_cache', [ $this, 'ajax_clear_cache' ] );
 	}
 
 	/**
@@ -43,8 +43,8 @@ class Health {
 		}
 
 		wp_add_dashboard_widget(
-			'headlessbridge_health_widget',
-			__( 'Headless Bridge Status', 'headless-bridge-by-kjm' ),
+			'kjmhcg_health_widget',
+			__( 'Headless CMS Gateway Status', 'kjm-headless-cms-gateway' ),
 			[ $this, 'render_dashboard_widget' ]
 		);
 	}
@@ -54,7 +54,7 @@ class Health {
 	 */
 	public function render_dashboard_widget(): void {
 		$results = $this->get_cached_results();
-		include HEADLESSBRIDGE_PLUGIN_DIR . 'templates/health-widget.php';
+		include KJMHCG_PLUGIN_DIR . 'templates/health-widget.php';
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Health {
 	 */
 	public function register_rest_route(): void {
 		register_rest_route(
-			'headlessbridge/v1',
+			'kjmhcg/v1',
 			'/health',
 			[
 				'methods'             => 'GET',
@@ -93,10 +93,10 @@ class Health {
 	 * AJAX handler for the admin UI "Run Check" button.
 	 */
 	public function ajax_health_check(): void {
-		check_ajax_referer( 'headlessbridge_health_nonce', 'nonce' );
+		check_ajax_referer( 'kjmhcg_health_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		wp_send_json_success( $this->run_checks( true ) );
@@ -106,14 +106,14 @@ class Health {
 	 * AJAX handler to clear health check cache.
 	 */
 	public function ajax_clear_cache(): void {
-		check_ajax_referer( 'headlessbridge_health_nonce', 'nonce' );
+		check_ajax_referer( 'kjmhcg_health_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		delete_transient( self::CACHE_KEY );
-		wp_send_json_success( __( 'Cache cleared.', 'headless-bridge-by-kjm' ) );
+		wp_send_json_success( __( 'Cache cleared.', 'kjm-headless-cms-gateway' ) );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Health {
 
 	private function check_wp_api(): array {
 		$url      = rest_url( '/' );
-		$response = wp_remote_get( $url, [ 'timeout' => 5, 'sslverify' => apply_filters( 'headlessbridge_health_sslverify', true, $url ) ] );
+		$response = wp_remote_get( $url, [ 'timeout' => 5, 'sslverify' => apply_filters( 'kjmhcg_health_sslverify', true, $url ) ] );
 
 		if ( is_wp_error( $response ) ) {
 			return $this->result( false, $response->get_error_message() );
@@ -170,13 +170,13 @@ class Health {
 
 	private function check_graphql(): array {
 		if ( ! function_exists( 'graphql' ) ) {
-			return $this->result( false, __( 'WPGraphQL plugin not active.', 'headless-bridge-by-kjm' ) );
+			return $this->result( false, __( 'WPGraphQL plugin not active.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$url      = home_url( '/graphql' );
 		$response = wp_remote_post( $url, [
 			'timeout'     => 5,
-			'sslverify'   => apply_filters( 'headlessbridge_health_sslverify', true, $url ),
+			'sslverify'   => apply_filters( 'kjmhcg_health_sslverify', true, $url ),
 			'headers'     => [ 'Content-Type' => 'application/json' ],
 			'body'        => wp_json_encode( [ 'query' => '{ __typename }' ] ),
 		] );
@@ -193,10 +193,10 @@ class Health {
 		$frontend_url = $this->settings->frontend_url();
 
 		if ( empty( $frontend_url ) ) {
-			return $this->result( false, __( 'No frontend URL configured.', 'headless-bridge-by-kjm' ) );
+			return $this->result( false, __( 'No frontend URL configured.', 'kjm-headless-cms-gateway' ) );
 		}
 
-		$response = wp_remote_get( $frontend_url, [ 'timeout' => 8, 'sslverify' => apply_filters( 'headlessbridge_health_sslverify', true, $frontend_url ) ] );
+		$response = wp_remote_get( $frontend_url, [ 'timeout' => 8, 'sslverify' => apply_filters( 'kjmhcg_health_sslverify', true, $frontend_url ) ] );
 
 		if ( is_wp_error( $response ) ) {
 			return $this->result( false, $response->get_error_message() );
@@ -209,11 +209,11 @@ class Health {
 	private function check_cors(): array {
 		$origins = $this->settings->allowed_origins();
 		if ( empty( $origins ) ) {
-			return $this->result( null, __( 'No origins configured.', 'headless-bridge-by-kjm' ) );
+			return $this->result( null, __( 'No origins configured.', 'kjm-headless-cms-gateway' ) );
 		}
 		return $this->result( true, sprintf(
 			/* translators: %d: number of allowed origins */
-			_n( '%d origin configured.', '%d origins configured.', count( $origins ), 'headless-bridge-by-kjm' ),
+			_n( '%d origin configured.', '%d origins configured.', count( $origins ), 'kjm-headless-cms-gateway' ),
 			count( $origins )
 		) );
 	}
@@ -223,8 +223,8 @@ class Health {
 			true,
 			sprintf(
 				/* translators: %s: plugin version */
-				__( 'Headless Bridge v%s active.', 'headless-bridge-by-kjm' ),
-				HEADLESSBRIDGE_VERSION
+				__( 'Headless CMS Gateway v%s active.', 'kjm-headless-cms-gateway' ),
+				KJMHCG_VERSION
 			)
 		);
 	}

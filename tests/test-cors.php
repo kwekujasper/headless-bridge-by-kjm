@@ -1,12 +1,12 @@
 <?php
 /**
- * Unit tests for HeadlessBridge\Cors.
+ * Unit tests for KJMHCG\Cors.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-use HeadlessBridge\Cors;
-use HeadlessBridge\Settings;
+use KJMHCG\Cors;
+use KJMHCG\Settings;
 
 class Test_Cors extends WP_UnitTestCase {
 
@@ -20,12 +20,12 @@ class Test_Cors extends WP_UnitTestCase {
 	}
 
 	public function tear_down(): void {
-		delete_option( 'headlessbridge_allowed_origins' );
+		delete_option( 'kjmhcg_allowed_origins' );
 		parent::tear_down();
 	}
 
 	public function test_no_cors_headers_emitted_without_origin(): void {
-		update_option( 'headlessbridge_allowed_origins', 'https://plus233.com' );
+		update_option( 'kjmhcg_allowed_origins', 'https://plus233.com' );
 		unset( $_SERVER['HTTP_ORIGIN'] );
 
 		// Should not throw or emit anything when there's no request origin.
@@ -34,7 +34,7 @@ class Test_Cors extends WP_UnitTestCase {
 	}
 
 	public function test_no_cors_headers_without_configured_origins(): void {
-		update_option( 'headlessbridge_allowed_origins', '' );
+		update_option( 'kjmhcg_allowed_origins', '' );
 		$_SERVER['HTTP_ORIGIN'] = 'https://evil.com';
 
 		$this->expectNotToPerformAssertions();

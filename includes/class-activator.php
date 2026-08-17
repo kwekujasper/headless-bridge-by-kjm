@@ -2,10 +2,10 @@
 /**
  * Fired during plugin activation.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,32 +28,43 @@ class Activator {
 	}
 
 	/**
-	 * One-time migration for sites that previously ran this plugin under its
-	 * old name/prefix ("headlesswp_*", before the rename to Headless Bridge).
-	 * Copies each legacy option to its new key only if the new key has no
-	 * value yet — never overwrites, and never deletes the legacy option, so
-	 * a config already set up under the old name survives the rename.
+	 * One-time migration for sites that previously ran this plugin under an
+	 * older name/prefix, before the rename to KJM Headless CMS Gateway:
+	 *   - "headlesswp_*"     (the original "HeadlessWP by KJM")
+	 *   - "headlessbridge_*" (the interim "Headless Bridge by KJM", 1.2–1.3)
+	 * Copies each legacy option to its new "kjmhcg_" key only if that key has
+	 * no value yet — never overwrites, and never deletes the legacy option, so
+	 * a config already set up under an old name survives the rename. When both
+	 * legacy prefixes hold a value, the newer "headlessbridge_" one wins.
 	 */
 	private static function migrate_legacy_options(): void {
-		$legacy_keys = [
-			'headlesswp_enabled', 'headlesswp_frontend_url', 'headlesswp_noindex',
-			'headlesswp_preserve_slugs', 'headlesswp_post_path_prefix', 'headlesswp_disable_rss',
-			'headlesswp_disable_search', 'headlesswp_disable_comments',
-			'headlesswp_disable_author_archives', 'headlesswp_disable_date_archives',
-			'headlesswp_allowed_origins', 'headlesswp_maintenance_mode',
-			'headlesswp_xmlrpc_enabled', 'headlesswp_robots_txt', 'headlesswp_webhooks',
-			'headlesswp_image_strategy',
+		$suffixes = [
+			'enabled', 'frontend_url', 'noindex', 'preserve_slugs', 'post_path_prefix',
+			'disable_rss', 'disable_search', 'disable_comments', 'disable_author_archives',
+			'disable_date_archives', 'allowed_origins', 'maintenance_mode', 'xmlrpc_enabled',
+			'robots_txt', 'image_strategy', 'home_category', 'menu_items', 'homepage_sections',
+			'webhooks',
 		];
 
-		foreach ( $legacy_keys as $legacy_key ) {
-			$legacy_value = get_option( $legacy_key, null );
-			if ( null === $legacy_value ) {
-				continue;
+		// Ordered oldest → newest; the last non-null value found wins.
+		$legacy_prefixes = [ 'headlesswp_', 'headlessbridge_' ];
+
+		foreach ( $suffixes as $suffix ) {
+			$new_key = 'kjmhcg_' . $suffix;
+			if ( get_option( $new_key ) !== false ) {
+				continue; // Already set under the new prefix — leave it alone.
 			}
 
-			$new_key = 'headlessbridge_' . substr( $legacy_key, strlen( 'headlesswp_' ) );
-			if ( get_option( $new_key ) === false ) {
-				add_option( $new_key, $legacy_value );
+			$value = null;
+			foreach ( $legacy_prefixes as $prefix ) {
+				$legacy_value = get_option( $prefix . $suffix, null );
+				if ( null !== $legacy_value ) {
+					$value = $legacy_value;
+				}
+			}
+
+			if ( null !== $value ) {
+				add_option( $new_key, $value );
 			}
 		}
 	}
@@ -63,25 +74,25 @@ class Activator {
 	 */
 	private static function set_defaults(): void {
 		$defaults = [
-			'headlessbridge_enabled'                 => '0',
-			'headlessbridge_frontend_url'            => '',
-			'headlessbridge_noindex'                 => '0',
-			'headlessbridge_preserve_slugs'          => '1',
-			'headlessbridge_post_path_prefix'        => '',
-			'headlessbridge_disable_rss'             => '0',
-			'headlessbridge_disable_search'          => '0',
-			'headlessbridge_disable_comments'        => '0',
-			'headlessbridge_disable_author_archives' => '0',
-			'headlessbridge_disable_date_archives'   => '0',
-			'headlessbridge_allowed_origins'         => '',
-			'headlessbridge_maintenance_mode'        => '0',
-			'headlessbridge_xmlrpc_enabled'          => '1',
-			'headlessbridge_robots_txt'              => '0',
-			'headlessbridge_image_strategy'          => 'native',
-			'headlessbridge_home_category'           => '',
-			'headlessbridge_menu_items'              => '',
-			'headlessbridge_homepage_sections'       => '',
-			'headlessbridge_webhooks'                => [],
+			'kjmhcg_enabled'                 => '0',
+			'kjmhcg_frontend_url'            => '',
+			'kjmhcg_noindex'                 => '0',
+			'kjmhcg_preserve_slugs'          => '1',
+			'kjmhcg_post_path_prefix'        => '',
+			'kjmhcg_disable_rss'             => '0',
+			'kjmhcg_disable_search'          => '0',
+			'kjmhcg_disable_comments'        => '0',
+			'kjmhcg_disable_author_archives' => '0',
+			'kjmhcg_disable_date_archives'   => '0',
+			'kjmhcg_allowed_origins'         => '',
+			'kjmhcg_maintenance_mode'        => '0',
+			'kjmhcg_xmlrpc_enabled'          => '1',
+			'kjmhcg_robots_txt'              => '0',
+			'kjmhcg_image_strategy'          => 'native',
+			'kjmhcg_home_category'           => '',
+			'kjmhcg_menu_items'              => '',
+			'kjmhcg_homepage_sections'       => '',
+			'kjmhcg_webhooks'                => [],
 		];
 
 		foreach ( $defaults as $key => $value ) {

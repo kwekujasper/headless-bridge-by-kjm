@@ -2,10 +2,10 @@
 /**
  * CORS header management.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

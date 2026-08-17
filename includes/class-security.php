@@ -2,10 +2,10 @@
 /**
  * Security hardening for the headless setup.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ class Security {
 		remove_action( 'wp_head', 'wlwmanifest_link' );
 		remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 
-		if ( ! $this->settings->is_enabled( 'headlessbridge_xmlrpc_enabled' ) ) {
+		if ( ! $this->settings->is_enabled( 'kjmhcg_xmlrpc_enabled' ) ) {
 			add_filter( 'xmlrpc_enabled', '__return_false' );
 			add_filter( 'xmlrpc_methods', [ $this, 'remove_xmlrpc_methods' ] );
 		}

@@ -2,10 +2,10 @@
 /**
  * Settings accessor — thin wrapper around WordPress Options API.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Settings {
 
-	/** Allowed values for the headlessbridge_image_strategy option. */
+	/** Allowed values for the kjmhcg_image_strategy option. */
 	private const IMAGE_STRATEGIES = [ 'native', 'sharp', 'proxy', 'unoptimized' ];
 
 	/**
@@ -41,7 +41,7 @@ class Settings {
 	 * Return the sanitized frontend URL, or empty string.
 	 */
 	public function frontend_url(): string {
-		return (string) $this->get( 'headlessbridge_frontend_url', '' );
+		return (string) $this->get( 'kjmhcg_frontend_url', '' );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Settings {
 	 * /my-slug/.
 	 */
 	public function post_path_prefix(): string {
-		return trim( (string) $this->get( 'headlessbridge_post_path_prefix', '' ), '/' );
+		return trim( (string) $this->get( 'kjmhcg_post_path_prefix', '' ), '/' );
 	}
 
 	/**
@@ -63,7 +63,7 @@ class Settings {
 	 * directly via update_option() bypassing the sanitize callback.
 	 */
 	public function image_strategy(): string {
-		$value = (string) $this->get( 'headlessbridge_image_strategy', 'native' );
+		$value = (string) $this->get( 'kjmhcg_image_strategy', 'native' );
 		return in_array( $value, self::IMAGE_STRATEGIES, true ) ? $value : 'native';
 	}
 
@@ -71,7 +71,7 @@ class Settings {
 	 * Whether headless mode is currently active.
 	 */
 	public function is_headless(): bool {
-		return $this->is_enabled( 'headlessbridge_enabled' );
+		return $this->is_enabled( 'kjmhcg_enabled' );
 	}
 
 	/**
@@ -80,7 +80,7 @@ class Settings {
 	 * @return string[]
 	 */
 	public function allowed_origins(): array {
-		$raw = (string) $this->get( 'headlessbridge_allowed_origins', '' );
+		$raw = (string) $this->get( 'kjmhcg_allowed_origins', '' );
 		if ( '' === $raw ) {
 			return [];
 		}
@@ -95,7 +95,7 @@ class Settings {
 	 * or removed in WordPress.
 	 */
 	public function home_category(): string {
-		return sanitize_title( (string) $this->get( 'headlessbridge_home_category', '' ) );
+		return sanitize_title( (string) $this->get( 'kjmhcg_home_category', '' ) );
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Settings {
 	 * whose slug no longer exists / has no posts is dropped by the frontend.
 	 */
 	public function menu_items(): string {
-		return (string) $this->get( 'headlessbridge_menu_items', '' );
+		return (string) $this->get( 'kjmhcg_menu_items', '' );
 	}
 
 	/**
@@ -118,7 +118,7 @@ class Settings {
 	 * shape as menu_items().
 	 */
 	public function homepage_sections(): string {
-		$raw   = (string) $this->get( 'headlessbridge_homepage_sections', '' );
+		$raw   = (string) $this->get( 'kjmhcg_homepage_sections', '' );
 		$slugs = array_filter( array_map( 'sanitize_title', array_map( 'trim', explode( "\n", $raw ) ) ) );
 		return implode( "\n", $slugs );
 	}
@@ -139,37 +139,37 @@ class Settings {
 	 * fields absent from the submitted form — so options must be split into
 	 * one group per tab. Sharing a single group across tabs previously
 	 * caused saving one tab (e.g. CORS) to null out another tab's fields
-	 * (e.g. General's headlessbridge_enabled / headlessbridge_frontend_url).
+	 * (e.g. General's kjmhcg_enabled / kjmhcg_frontend_url).
 	 */
 	public function register_settings(): void {
 		$groups = [
-			'headlessbridge_general'  => [
-				'headlessbridge_enabled'          => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_frontend_url'     => [ 'sanitize_callback' => 'esc_url_raw' ],
-				'headlessbridge_image_strategy'   => [ 'sanitize_callback' => [ $this, 'sanitize_image_strategy' ] ],
-				'headlessbridge_preserve_slugs'   => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_post_path_prefix' => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_maintenance_mode' => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_xmlrpc_enabled'   => [ 'sanitize_callback' => 'sanitize_text_field' ],
+			'kjmhcg_general'  => [
+				'kjmhcg_enabled'          => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_frontend_url'     => [ 'sanitize_callback' => 'esc_url_raw' ],
+				'kjmhcg_image_strategy'   => [ 'sanitize_callback' => [ $this, 'sanitize_image_strategy' ] ],
+				'kjmhcg_preserve_slugs'   => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_post_path_prefix' => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_maintenance_mode' => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_xmlrpc_enabled'   => [ 'sanitize_callback' => 'sanitize_text_field' ],
 			],
-			'headlessbridge_seo'      => [
-				'headlessbridge_noindex'    => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_robots_txt' => [ 'sanitize_callback' => 'sanitize_text_field' ],
+			'kjmhcg_seo'      => [
+				'kjmhcg_noindex'    => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_robots_txt' => [ 'sanitize_callback' => 'sanitize_text_field' ],
 			],
-			'headlessbridge_features' => [
-				'headlessbridge_disable_rss'             => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_disable_search'          => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_disable_comments'        => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_disable_author_archives' => [ 'sanitize_callback' => 'sanitize_text_field' ],
-				'headlessbridge_disable_date_archives'   => [ 'sanitize_callback' => 'sanitize_text_field' ],
+			'kjmhcg_features' => [
+				'kjmhcg_disable_rss'             => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_disable_search'          => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_disable_comments'        => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_disable_author_archives' => [ 'sanitize_callback' => 'sanitize_text_field' ],
+				'kjmhcg_disable_date_archives'   => [ 'sanitize_callback' => 'sanitize_text_field' ],
 			],
-			'headlessbridge_api'      => [
-				'headlessbridge_allowed_origins' => [ 'sanitize_callback' => [ $this, 'sanitize_origins' ] ],
+			'kjmhcg_api'      => [
+				'kjmhcg_allowed_origins' => [ 'sanitize_callback' => [ $this, 'sanitize_origins' ] ],
 			],
-			'headlessbridge_content'  => [
-				'headlessbridge_home_category'     => [ 'sanitize_callback' => 'sanitize_title' ],
-				'headlessbridge_menu_items'        => [ 'sanitize_callback' => [ $this, 'sanitize_menu_items' ] ],
-				'headlessbridge_homepage_sections' => [ 'sanitize_callback' => [ $this, 'sanitize_menu_categories' ] ],
+			'kjmhcg_content'  => [
+				'kjmhcg_home_category'     => [ 'sanitize_callback' => 'sanitize_title' ],
+				'kjmhcg_menu_items'        => [ 'sanitize_callback' => [ $this, 'sanitize_menu_items' ] ],
+				'kjmhcg_homepage_sections' => [ 'sanitize_callback' => [ $this, 'sanitize_menu_categories' ] ],
 			],
 		];
 

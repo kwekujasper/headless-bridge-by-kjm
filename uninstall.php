@@ -4,7 +4,7 @@
  *
  * Removes all plugin options from the database.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
@@ -16,29 +16,40 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 
 $option_keys = [
-	'headlessbridge_enabled',
-	'headlessbridge_frontend_url',
-	'headlessbridge_noindex',
-	'headlessbridge_preserve_slugs',
-	'headlessbridge_post_path_prefix',
-	'headlessbridge_disable_rss',
-	'headlessbridge_disable_search',
-	'headlessbridge_disable_comments',
-	'headlessbridge_disable_author_archives',
-	'headlessbridge_disable_date_archives',
-	'headlessbridge_allowed_origins',
-	'headlessbridge_maintenance_mode',
-	'headlessbridge_xmlrpc_enabled',
-	'headlessbridge_robots_txt',
-	'headlessbridge_image_strategy',
-	'headlessbridge_home_category',
-	'headlessbridge_menu_items',
-	'headlessbridge_homepage_sections',
-	'headlessbridge_webhooks',
+	'kjmhcg_enabled',
+	'kjmhcg_frontend_url',
+	'kjmhcg_noindex',
+	'kjmhcg_preserve_slugs',
+	'kjmhcg_post_path_prefix',
+	'kjmhcg_disable_rss',
+	'kjmhcg_disable_search',
+	'kjmhcg_disable_comments',
+	'kjmhcg_disable_author_archives',
+	'kjmhcg_disable_date_archives',
+	'kjmhcg_allowed_origins',
+	'kjmhcg_maintenance_mode',
+	'kjmhcg_xmlrpc_enabled',
+	'kjmhcg_robots_txt',
+	'kjmhcg_image_strategy',
+	'kjmhcg_home_category',
+	'kjmhcg_menu_items',
+	'kjmhcg_homepage_sections',
+	'kjmhcg_webhooks',
 ];
 
 foreach ( $option_keys as $key ) {
 	delete_option( $key );
 }
 
-delete_transient( 'headlessbridge_health_cache' );
+// Also remove options left behind under the plugin's two older prefixes
+// (HeadlessWP → "headlesswp_", Headless Bridge → "headlessbridge_"), since the
+// rename migration copies rather than deletes them. Keys share the same
+// suffixes as the current "kjmhcg_" options.
+foreach ( [ 'headlesswp_', 'headlessbridge_' ] as $legacy_prefix ) {
+	foreach ( $option_keys as $key ) {
+		delete_option( $legacy_prefix . substr( $key, strlen( 'kjmhcg_' ) ) );
+	}
+	delete_transient( $legacy_prefix . 'health_cache' );
+}
+
+delete_transient( 'kjmhcg_health_cache' );

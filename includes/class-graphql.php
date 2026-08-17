@@ -1,13 +1,13 @@
 <?php
 /**
- * Exposes select Headless Bridge settings over WPGraphQL so the frontend can
+ * Exposes select Headless CMS Gateway settings over WPGraphQL so the frontend can
  * read them at request time instead of needing a duplicated, manually
  * synced config value.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ class Graphql {
 			'postPathPrefix',
 			[
 				'type'        => 'String',
-				'description' => __( 'Path segment Headless Bridge prepends to single-post redirects (e.g. "post"), or empty for root-level post URLs.', 'headless-bridge-by-kjm' ),
+				'description' => __( 'Path segment Headless CMS Gateway prepends to single-post redirects (e.g. "post"), or empty for root-level post URLs.', 'kjm-headless-cms-gateway' ),
 				'resolve'     => fn() => $this->settings->post_path_prefix(),
 			]
 		);
@@ -48,7 +48,7 @@ class Graphql {
 			'imageStrategy',
 			[
 				'type'        => 'String',
-				'description' => __( 'Frontend image optimization strategy: "native", "sharp" (self-hosted Node.js resizer), "proxy" (wsrv.nl), or "unoptimized".', 'headless-bridge-by-kjm' ),
+				'description' => __( 'Frontend image optimization strategy: "native", "sharp" (self-hosted Node.js resizer), "proxy" (wsrv.nl), or "unoptimized".', 'kjm-headless-cms-gateway' ),
 				'resolve'     => fn() => $this->settings->image_strategy(),
 			]
 		);
@@ -58,7 +58,7 @@ class Graphql {
 			'homeCategory',
 			[
 				'type'        => 'String',
-				'description' => __( 'Category slug whose posts fill the frontend homepage feed, or empty to use the frontend default / most-recent posts.', 'headless-bridge-by-kjm' ),
+				'description' => __( 'Category slug whose posts fill the frontend homepage feed, or empty to use the frontend default / most-recent posts.', 'kjm-headless-cms-gateway' ),
 				'resolve'     => fn() => $this->settings->home_category(),
 			]
 		);
@@ -68,7 +68,7 @@ class Graphql {
 			'menuItems',
 			[
 				'type'        => 'String',
-				'description' => __( 'Newline-separated, ordered nav-menu tokens for the frontend, or empty to auto-list all categories. Each line is "category:<slug>" or "link:<label>|<url>". The frontend splits on newlines and parses each token.', 'headless-bridge-by-kjm' ),
+				'description' => __( 'Newline-separated, ordered nav-menu tokens for the frontend, or empty to auto-list all categories. Each line is "category:<slug>" or "link:<label>|<url>". The frontend splits on newlines and parses each token.', 'kjm-headless-cms-gateway' ),
 				'resolve'     => fn() => $this->settings->menu_items(),
 			]
 		);
@@ -78,7 +78,7 @@ class Graphql {
 			'homepageSections',
 			[
 				'type'        => 'String',
-				'description' => __( 'Newline-separated, ordered category slugs the frontend homepage renders as their own sections, or empty for none. The frontend splits on newlines.', 'headless-bridge-by-kjm' ),
+				'description' => __( 'Newline-separated, ordered category slugs the frontend homepage renders as their own sections, or empty for none. The frontend splits on newlines.', 'kjm-headless-cms-gateway' ),
 				'resolve'     => fn() => $this->settings->homepage_sections(),
 			]
 		);

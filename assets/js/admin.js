@@ -1,32 +1,32 @@
-/* HeadlessBridge Admin JavaScript */
-/* global headlessbridgeAdmin, jQuery */
+/* KJMHCG Admin JavaScript */
+/* global kjmhcgAdmin, jQuery */
 
 ( function ( $ ) {
 	'use strict';
 
-	const cfg = window.headlessbridgeAdmin || {};
+	const cfg = window.kjmhcgAdmin || {};
 
 	// ── Health check ────────────────────────────────────────────────
 
-	$( '#headlessbridge-run-check' ).on( 'click', function () {
+	$( '#kjmhcg-run-check' ).on( 'click', function () {
 		const $btn     = $( this );
-		const $results = $( '#headlessbridge-health-results' );
+		const $results = $( '#kjmhcg-health-results' );
 
 		$btn.text( cfg.i18n.checking ).prop( 'disabled', true );
 
 		$.post( cfg.ajaxUrl, {
-			action : 'headlessbridge_health_check',
+			action : 'kjmhcg_health_check',
 			nonce  : cfg.healthNonce,
 		} )
 		.done( function ( response ) {
 			if ( response.success ) {
 				$results.html( renderHealthResults( response.data ) );
 			} else {
-				$results.html( '<p class="headlessbridge-status--fail">' + cfg.i18n.error + '</p>' );
+				$results.html( '<p class="kjmhcg-status--fail">' + cfg.i18n.error + '</p>' );
 			}
 		} )
 		.fail( function () {
-			$results.html( '<p class="headlessbridge-status--fail">' + cfg.i18n.error + '</p>' );
+			$results.html( '<p class="kjmhcg-status--fail">' + cfg.i18n.error + '</p>' );
 		} )
 		.always( function () {
 			$btn.text( cfg.i18n.runCheck ).prop( 'disabled', false );
@@ -35,12 +35,12 @@
 
 	// ── Clear cache ─────────────────────────────────────────────────
 
-	$( '#headlessbridge-clear-cache' ).on( 'click', function () {
+	$( '#kjmhcg-clear-cache' ).on( 'click', function () {
 		const $btn = $( this );
 		$btn.prop( 'disabled', true );
 
 		$.post( cfg.ajaxUrl, {
-			action : 'headlessbridge_clear_health_cache',
+			action : 'kjmhcg_clear_health_cache',
 			nonce  : cfg.healthNonce,
 		} )
 		.done( function ( response ) {
@@ -64,7 +64,7 @@
 			plugin   : 'Plugin Status',
 		};
 
-		let html = '<div class="headlessbridge-health-grid">';
+		let html = '<div class="kjmhcg-health-grid">';
 
 		Object.entries( labelMap ).forEach( function ( [ key, label ] ) {
 			if ( ! data[ key ] ) return;
@@ -75,27 +75,27 @@
 
 			let statusClass, statusIcon, statusText;
 			if ( ok === true ) {
-				statusClass = 'headlessbridge-status--pass';
+				statusClass = 'kjmhcg-status--pass';
 				statusIcon  = '✓';
 				statusText  = cfg.i18n.pass;
 			} else if ( ok === false ) {
-				statusClass = 'headlessbridge-status--fail';
+				statusClass = 'kjmhcg-status--fail';
 				statusIcon  = '✗';
 				statusText  = cfg.i18n.fail;
 			} else {
-				statusClass = 'headlessbridge-status--info';
+				statusClass = 'kjmhcg-status--info';
 				statusIcon  = '●';
 				statusText  = cfg.i18n.info;
 			}
 
 			html += `
-				<div class="headlessbridge-health-item">
-					<span class="headlessbridge-health-label">${ escHtml( label ) }</span>
-					<span class="headlessbridge-health-status ${ escHtml( statusClass ) }">
-						<span class="headlessbridge-status-icon" aria-hidden="true">${ escHtml( statusIcon ) }</span>
+				<div class="kjmhcg-health-item">
+					<span class="kjmhcg-health-label">${ escHtml( label ) }</span>
+					<span class="kjmhcg-health-status ${ escHtml( statusClass ) }">
+						<span class="kjmhcg-status-icon" aria-hidden="true">${ escHtml( statusIcon ) }</span>
 						${ escHtml( statusText ) }
 					</span>
-					<span class="headlessbridge-health-detail">${ escHtml( detail ) }</span>
+					<span class="kjmhcg-health-detail">${ escHtml( detail ) }</span>
 				</div>
 			`;
 		} );
@@ -103,7 +103,7 @@
 		html += '</div>';
 
 		if ( data.checked_at ) {
-			html += `<p class="headlessbridge-health-timestamp">Last checked: ${ escHtml( data.checked_at ) }</p>`;
+			html += `<p class="kjmhcg-health-timestamp">Last checked: ${ escHtml( data.checked_at ) }</p>`;
 		}
 
 		return html;
@@ -111,21 +111,21 @@
 
 	// ── Reset Settings confirmation modal ────────────────────────────
 
-	const $resetOverlay = $( '#headlessbridge-reset-modal-overlay' );
+	const $resetOverlay = $( '#kjmhcg-reset-modal-overlay' );
 
 	function openResetModal() {
-		$( '#headlessbridge-reset-password' ).val( '' );
-		$( '#headlessbridge-reset-modal-error' ).hide();
+		$( '#kjmhcg-reset-password' ).val( '' );
+		$( '#kjmhcg-reset-modal-error' ).hide();
 		$resetOverlay.show();
-		$( '#headlessbridge-reset-password' ).trigger( 'focus' );
+		$( '#kjmhcg-reset-password' ).trigger( 'focus' );
 	}
 
 	function closeResetModal() {
 		$resetOverlay.hide();
 	}
 
-	$( '#headlessbridge-reset-open' ).on( 'click', openResetModal );
-	$( '#headlessbridge-reset-cancel' ).on( 'click', closeResetModal );
+	$( '#kjmhcg-reset-open' ).on( 'click', openResetModal );
+	$( '#kjmhcg-reset-cancel' ).on( 'click', closeResetModal );
 
 	$resetOverlay.on( 'click', function ( e ) {
 		if ( e.target === this ) {
@@ -139,45 +139,45 @@
 		}
 	} );
 
-	$( '#headlessbridge-reset-password' ).on( 'keydown', function ( e ) {
+	$( '#kjmhcg-reset-password' ).on( 'keydown', function ( e ) {
 		if ( 'Enter' === e.key ) {
 			e.preventDefault();
-			$( '#headlessbridge-reset-confirm' ).trigger( 'click' );
+			$( '#kjmhcg-reset-confirm' ).trigger( 'click' );
 		}
 	} );
 
-	$( '#headlessbridge-reset-confirm' ).on( 'click', function () {
-		const password = $( '#headlessbridge-reset-password' ).val();
+	$( '#kjmhcg-reset-confirm' ).on( 'click', function () {
+		const password = $( '#kjmhcg-reset-password' ).val();
 
 		if ( ! password ) {
-			$( '#headlessbridge-reset-modal-error' ).show();
+			$( '#kjmhcg-reset-modal-error' ).show();
 			return;
 		}
 
-		$( '#headlessbridge-reset-password-hidden' ).val( password );
-		$( '#headlessbridge-reset-form' ).trigger( 'submit' );
+		$( '#kjmhcg-reset-password-hidden' ).val( password );
+		$( '#kjmhcg-reset-form' ).trigger( 'submit' );
 	} );
 
 	// ── Webhook builder ───────────────────────────────────────────────
 
-	const $formWrap = $( '#headlessbridge-webhook-form-wrap' );
-	const $formError = $( '#headlessbridge-webhook-form-error' );
+	const $formWrap = $( '#kjmhcg-webhook-form-wrap' );
+	const $formError = $( '#kjmhcg-webhook-form-error' );
 
 	function resetWebhookForm() {
-		$( '#headlessbridge-webhook-form-title' ).text( cfg.i18n.addWebhook );
-		$( '#headlessbridge-webhook-id' ).val( '' );
-		$( '#headlessbridge-webhook-name' ).val( '' );
-		$( '.headlessbridge-webhook-trigger' ).prop( 'checked', false );
-		$( '#headlessbridge-webhook-url' ).val( '' );
-		$( '#headlessbridge-webhook-secret' ).val( '' ).attr( 'type', 'password' );
-		$( '#headlessbridge-webhook-secret-toggle' ).text( cfg.i18n.showSecret );
-		$( '#headlessbridge-webhook-secret-note' ).hide();
-		$( '#headlessbridge-webhook-payload' ).val( '{"type":{{type}},"slug":{{slug}}}' );
-		$( '#headlessbridge-webhook-enabled' ).prop( 'checked', true );
+		$( '#kjmhcg-webhook-form-title' ).text( cfg.i18n.addWebhook );
+		$( '#kjmhcg-webhook-id' ).val( '' );
+		$( '#kjmhcg-webhook-name' ).val( '' );
+		$( '.kjmhcg-webhook-trigger' ).prop( 'checked', false );
+		$( '#kjmhcg-webhook-url' ).val( '' );
+		$( '#kjmhcg-webhook-secret' ).val( '' ).attr( 'type', 'password' );
+		$( '#kjmhcg-webhook-secret-toggle' ).text( cfg.i18n.showSecret );
+		$( '#kjmhcg-webhook-secret-note' ).hide();
+		$( '#kjmhcg-webhook-payload' ).val( '{"type":{{type}},"slug":{{slug}}}' );
+		$( '#kjmhcg-webhook-enabled' ).prop( 'checked', true );
 		$formError.hide().text( '' );
 	}
 
-	$( '#headlessbridge-webhook-add' ).on( 'click', function () {
+	$( '#kjmhcg-webhook-add' ).on( 'click', function () {
 		resetWebhookForm();
 		$formWrap.show();
 		$formWrap.get( 0 ).scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
@@ -187,24 +187,24 @@
 	// user only has to fill in two fields to revalidate their frontend on any
 	// content change. Checks every available trigger; the default payload
 	// template (already in the field) is left untouched.
-	$( '#headlessbridge-webhook-quick-setup' ).on( 'click', function () {
+	$( '#kjmhcg-webhook-quick-setup' ).on( 'click', function () {
 		resetWebhookForm();
-		$( '#headlessbridge-webhook-name' ).val( cfg.i18n.quickSetupName );
-		$( '.headlessbridge-webhook-trigger' ).prop( 'checked', true );
-		$( '#headlessbridge-webhook-url' ).trigger( 'focus' );
+		$( '#kjmhcg-webhook-name' ).val( cfg.i18n.quickSetupName );
+		$( '.kjmhcg-webhook-trigger' ).prop( 'checked', true );
+		$( '#kjmhcg-webhook-url' ).trigger( 'focus' );
 		$formWrap.show();
 		$formWrap.get( 0 ).scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
 	} );
 
-	$( '#headlessbridge-webhook-cancel' ).on( 'click', function () {
+	$( '#kjmhcg-webhook-cancel' ).on( 'click', function () {
 		$formWrap.hide();
 	} );
 
-	$( document ).on( 'click', '.headlessbridge-webhook-edit', function () {
+	$( document ).on( 'click', '.kjmhcg-webhook-edit', function () {
 		const id = $( this ).closest( 'tr' ).data( 'webhook-id' );
 
 		$.post( cfg.ajaxUrl, {
-			action : 'headlessbridge_webhook_get',
+			action : 'kjmhcg_webhook_get',
 			nonce  : cfg.webhooksNonce,
 			id     : id,
 		} )
@@ -216,19 +216,19 @@
 			const webhook = response.data;
 
 			resetWebhookForm();
-			$( '#headlessbridge-webhook-form-title' ).text( cfg.i18n.editWebhook );
-			$( '#headlessbridge-webhook-id' ).val( webhook.id );
-			$( '#headlessbridge-webhook-name' ).val( webhook.name );
-			$( '#headlessbridge-webhook-url' ).val( webhook.url );
-			$( '#headlessbridge-webhook-payload' ).val( webhook.payload );
-			$( '#headlessbridge-webhook-enabled' ).prop( 'checked', !! webhook.enabled );
+			$( '#kjmhcg-webhook-form-title' ).text( cfg.i18n.editWebhook );
+			$( '#kjmhcg-webhook-id' ).val( webhook.id );
+			$( '#kjmhcg-webhook-name' ).val( webhook.name );
+			$( '#kjmhcg-webhook-url' ).val( webhook.url );
+			$( '#kjmhcg-webhook-payload' ).val( webhook.payload );
+			$( '#kjmhcg-webhook-enabled' ).prop( 'checked', !! webhook.enabled );
 
 			( webhook.triggers || [] ).forEach( function ( key ) {
-				$( '.headlessbridge-webhook-trigger[value="' + key + '"]' ).prop( 'checked', true );
+				$( '.kjmhcg-webhook-trigger[value="' + key + '"]' ).prop( 'checked', true );
 			} );
 
 			if ( webhook.has_secret ) {
-				$( '#headlessbridge-webhook-secret-note' ).show();
+				$( '#kjmhcg-webhook-secret-note' ).show();
 			}
 
 			$formWrap.show();
@@ -236,9 +236,9 @@
 		} );
 	} );
 
-	$( '#headlessbridge-webhook-save' ).on( 'click', function () {
+	$( '#kjmhcg-webhook-save' ).on( 'click', function () {
 		const $btn = $( this );
-		const triggers = $( '.headlessbridge-webhook-trigger:checked' ).map( function () {
+		const triggers = $( '.kjmhcg-webhook-trigger:checked' ).map( function () {
 			return $( this ).val();
 		} ).get();
 
@@ -251,15 +251,15 @@
 		$formError.hide();
 
 		$.post( cfg.ajaxUrl, {
-			action   : 'headlessbridge_webhook_save',
+			action   : 'kjmhcg_webhook_save',
 			nonce    : cfg.webhooksNonce,
-			id       : $( '#headlessbridge-webhook-id' ).val(),
-			name     : $( '#headlessbridge-webhook-name' ).val(),
+			id       : $( '#kjmhcg-webhook-id' ).val(),
+			name     : $( '#kjmhcg-webhook-name' ).val(),
 			triggers : triggers,
-			url      : $( '#headlessbridge-webhook-url' ).val(),
-			secret   : $( '#headlessbridge-webhook-secret' ).val(),
-			payload  : $( '#headlessbridge-webhook-payload' ).val(),
-			enabled  : $( '#headlessbridge-webhook-enabled' ).is( ':checked' ) ? 1 : 0,
+			url      : $( '#kjmhcg-webhook-url' ).val(),
+			secret   : $( '#kjmhcg-webhook-secret' ).val(),
+			payload  : $( '#kjmhcg-webhook-payload' ).val(),
+			enabled  : $( '#kjmhcg-webhook-enabled' ).is( ':checked' ) ? 1 : 0,
 		} )
 		.done( function ( response ) {
 			if ( response.success ) {
@@ -276,7 +276,7 @@
 		} );
 	} );
 
-	$( document ).on( 'click', '.headlessbridge-webhook-delete', function () {
+	$( document ).on( 'click', '.kjmhcg-webhook-delete', function () {
 		if ( ! window.confirm( cfg.i18n.confirmDelete ) ) {
 			return;
 		}
@@ -288,7 +288,7 @@
 		$btn.text( cfg.i18n.deleting ).prop( 'disabled', true );
 
 		$.post( cfg.ajaxUrl, {
-			action : 'headlessbridge_webhook_delete',
+			action : 'kjmhcg_webhook_delete',
 			nonce  : cfg.webhooksNonce,
 			id     : id,
 		} )
@@ -302,17 +302,17 @@
 		} );
 	} );
 
-	$( document ).on( 'click', '.headlessbridge-webhook-test', function () {
+	$( document ).on( 'click', '.kjmhcg-webhook-test', function () {
 		const $row    = $( this ).closest( 'tr' );
 		const id      = $row.data( 'webhook-id' );
 		const $btn    = $( this );
-		const $result = $row.find( '.headlessbridge-webhook-test-result' );
+		const $result = $row.find( '.kjmhcg-webhook-test-result' );
 
 		$btn.text( cfg.i18n.sendingTest ).prop( 'disabled', true );
 		$result.empty();
 
 		$.post( cfg.ajaxUrl, {
-			action : 'headlessbridge_webhook_test',
+			action : 'kjmhcg_webhook_test',
 			nonce  : cfg.webhooksNonce,
 			id     : id,
 		} )
@@ -320,39 +320,39 @@
 			const ok = response.success;
 			const detail = ( response.data && response.data.detail ) || response.data || '';
 			$result.html(
-				'<span class="' + ( ok ? 'headlessbridge-status--pass' : 'headlessbridge-status--fail' ) + '">' +
+				'<span class="' + ( ok ? 'kjmhcg-status--pass' : 'kjmhcg-status--fail' ) + '">' +
 				escHtml( ok ? cfg.i18n.testPass : cfg.i18n.testFail ) + ': ' + escHtml( String( detail ) ) +
 				'</span>'
 			);
 		} )
 		.fail( function () {
-			$result.html( '<span class="headlessbridge-status--fail">' + escHtml( cfg.i18n.error ) + '</span>' );
+			$result.html( '<span class="kjmhcg-status--fail">' + escHtml( cfg.i18n.error ) + '</span>' );
 		} )
 		.always( function () {
 			$btn.text( cfg.i18n.sendTest ).prop( 'disabled', false );
 		} );
 	} );
 
-	$( '#headlessbridge-webhook-secret-toggle' ).on( 'click', function () {
-		const $input = $( '#headlessbridge-webhook-secret' );
+	$( '#kjmhcg-webhook-secret-toggle' ).on( 'click', function () {
+		const $input = $( '#kjmhcg-webhook-secret' );
 		const isPwd  = 'password' === $input.attr( 'type' );
 		$input.attr( 'type', isPwd ? 'text' : 'password' );
 		$( this ).text( isPwd ? cfg.i18n.hideSecret : cfg.i18n.showSecret );
 	} );
 
-	$( '#headlessbridge-webhook-secret-generate' ).on( 'click', function () {
+	$( '#kjmhcg-webhook-secret-generate' ).on( 'click', function () {
 		const $btn = $( this );
 		$btn.text( cfg.i18n.generating ).prop( 'disabled', true );
 
 		$.post( cfg.ajaxUrl, {
-			action : 'headlessbridge_generate_secret',
+			action : 'kjmhcg_generate_secret',
 			nonce  : cfg.webhooksNonce,
 		} )
 		.done( function ( response ) {
 			if ( response.success ) {
-				$( '#headlessbridge-webhook-secret' ).val( response.data.secret ).attr( 'type', 'text' );
-				$( '#headlessbridge-webhook-secret-toggle' ).text( cfg.i18n.hideSecret );
-				$( '#headlessbridge-webhook-secret-note' ).hide();
+				$( '#kjmhcg-webhook-secret' ).val( response.data.secret ).attr( 'type', 'text' );
+				$( '#kjmhcg-webhook-secret-toggle' ).text( cfg.i18n.hideSecret );
+				$( '#kjmhcg-webhook-secret-note' ).hide();
 			}
 		} )
 		.always( function () {
@@ -376,13 +376,13 @@
 	// or drag, rebuild the field value = checked slugs in the list's current
 	// order, newline-separated (the format PHP already stores). The menu list
 	// (.hb-menu-list) is excluded — it has its own builder below.
-	$( '.headlessbridge-cat-picker' ).not( '.hb-menu-list' ).each( function () {
+	$( '.kjmhcg-cat-picker' ).not( '.hb-menu-list' ).each( function () {
 		const $list  = $( this );
 		const $field = $( '#' + $list.data( 'target' ) );
 
 		function sync() {
 			const slugs = [];
-			$list.find( '.headlessbridge-cat-item' ).each( function () {
+			$list.find( '.kjmhcg-cat-item' ).each( function () {
 				const $cb = $( this ).find( 'input[type="checkbox"]' );
 				if ( $cb.is( ':checked' ) ) {
 					slugs.push( $cb.val() );
@@ -393,9 +393,9 @@
 
 		if ( $.fn.sortable ) {
 			$list.sortable( {
-				handle               : '.headlessbridge-cat-handle',
+				handle               : '.kjmhcg-cat-handle',
 				axis                 : 'y',
-				placeholder          : 'headlessbridge-cat-placeholder',
+				placeholder          : 'kjmhcg-cat-placeholder',
 				forcePlaceholderSize : true,
 				update               : sync,
 			} );
@@ -412,7 +412,7 @@
 	// newline tokens: "category:<slug>" for checked categories, "link:<label>|
 	// <url>" for links with both fields filled. Malformed rows are skipped
 	// here and re-validated server-side.
-	$( '.headlessbridge-menu-builder' ).each( function () {
+	$( '.kjmhcg-menu-builder' ).each( function () {
 		const $wrap  = $( this );
 		const $list  = $wrap.find( '.hb-menu-list' );
 		const $field = $( '#' + $wrap.data( 'target' ) );
@@ -438,9 +438,9 @@
 
 		if ( $.fn.sortable ) {
 			$list.sortable( {
-				handle               : '.headlessbridge-cat-handle',
+				handle               : '.kjmhcg-cat-handle',
 				axis                 : 'y',
-				placeholder          : 'headlessbridge-cat-placeholder',
+				placeholder          : 'kjmhcg-cat-placeholder',
 				forcePlaceholderSize : true,
 				update               : sync,
 			} );
@@ -452,8 +452,8 @@
 			const labelPlaceholder = escHtml( ( cfg.i18n && cfg.i18n.linkLabel ) || 'Label' );
 			const urlPlaceholder   = escHtml( ( cfg.i18n && cfg.i18n.linkUrl ) || '/about or https://…' );
 			$list.append(
-				'<li class="headlessbridge-cat-item hb-menu-item" data-type="link">'
-				+ '<span class="headlessbridge-cat-handle" aria-hidden="true">&#9776;</span>'
+				'<li class="kjmhcg-cat-item hb-menu-item" data-type="link">'
+				+ '<span class="kjmhcg-cat-handle" aria-hidden="true">&#9776;</span>'
 				+ '<input type="text" class="hb-link-label" placeholder="' + labelPlaceholder + '" />'
 				+ '<input type="text" class="hb-link-url" placeholder="' + urlPlaceholder + '" />'
 				+ '<button type="button" class="button-link hb-link-remove" aria-label="Remove link">&times;</button>'

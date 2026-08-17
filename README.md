@@ -1,16 +1,16 @@
-# Headless Bridge by KJM
+# KJM Headless CMS Gateway
 
 Transform WordPress into a secure, configurable headless CMS for any modern frontend framework (Next.js, Nuxt, Astro, SvelteKit, and more).
 
 **Author:** Kweku Jasper Media ([@kwekujasper](https://github.com/kwekujasper))
-**Requires at least:** WordPress 6.5 · **Requires PHP:** 8.1 · **Stable tag:** 1.3.0
+**Requires at least:** WordPress 6.5 · **Requires PHP:** 8.1 · **Stable tag:** 1.4.0
 **License:** [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
 
 > This is the source repository. [`readme.txt`](readme.txt) is the canonical WordPress.org-format listing; this file is a GitHub-friendly overview of the same plugin.
 
 ## Description
 
-**Headless Bridge by KJM** is a production-ready plugin that converts WordPress into a powerful headless CMS while preserving full access to the REST API, GraphQL, admin, AJAX, and cron endpoints. Point it at your frontend, turn on Headless Mode, and every normal front-end visitor request gets redirected there — while `/wp-json/*`, `/graphql`, `/wp-admin/*`, and the other operational endpoints keep working normally.
+**KJM Headless CMS Gateway** is a production-ready plugin that converts WordPress into a powerful headless CMS while preserving full access to the REST API, GraphQL, admin, AJAX, and cron endpoints. Point it at your frontend, turn on Headless Mode, and every normal front-end visitor request gets redirected there — while `/wp-json/*`, `/graphql`, `/wp-admin/*`, and the other operational endpoints keep working normally.
 
 ## Key Features
 
@@ -37,9 +37,9 @@ Next.js · Nuxt · Astro · SvelteKit · Gatsby · React (any host) · Mobile ap
 
 ## Installation
 
-1. Upload the `headless-bridge-by-kjm` folder to `/wp-content/plugins/`.
+1. Upload the `kjm-headless-cms-gateway` folder to `/wp-content/plugins/`.
 2. Activate the plugin through **Plugins > Installed Plugins**.
-3. Go to **Settings > Headless Bridge**.
+3. Go to **Settings > Headless CMS Gateway**.
 4. Enter your **Frontend URL** (e.g. `https://yoursite.com`).
 5. Enable **Headless Mode**.
 6. Optionally configure CORS origins, disable features, and run a health check.
@@ -86,10 +86,15 @@ By default XML-RPC remains enabled (useful for Jetpack and mobile apps). You can
 Cut a release with:
 
 ```bash
-git tag v1.3.0 && git push --tags
+git tag v1.4.0 && git push --tags
 ```
 
 ## Changelog
+
+### 1.4.0
+* Renamed the plugin from "Headless Bridge by KJM" to **KJM Headless CMS Gateway** (new slug `kjm-headless-cms-gateway`, new text domain, new option/hook/CSS prefixes and PHP namespace). Existing installs keep their settings — values stored under the previous prefixes (`headlessbridge_*`, and the original `headlesswp_*`) are migrated automatically to the new `kjmhcg_*` keys on activation.
+* The admin screen now lives at **Settings > Headless CMS Gateway** (URL slug changed with the rename).
+* Uninstall now also cleans up options left behind under the two previous prefixes.
 
 ### 1.3.0
 * Added a new **Content** settings tab that maps WordPress categories to frontend slots, with no frontend redeploy needed: a **Homepage Category** (which category's posts fill the homepage feed; empty falls back to most-recent across all categories), a drag-to-order **Navigation Menu** builder mixing category checkboxes and custom links (label + URL), and **Homepage Sections** (ordered categories each rendered as their own section of latest posts).

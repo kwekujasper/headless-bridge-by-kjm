@@ -5,7 +5,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="robots" content="noindex, nofollow" />
-	<title><?php esc_html_e( 'Site Temporarily Unavailable', 'headless-bridge-by-kjm' ); ?></title>
+	<title><?php esc_html_e( 'Site Temporarily Unavailable', 'kjm-headless-cms-gateway' ); ?></title>
 	<style>
 		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -67,10 +67,10 @@
 <body>
 	<div class="maintenance-card">
 		<span class="maintenance-icon" aria-hidden="true">⚡</span>
-		<h1><?php esc_html_e( 'Frontend Temporarily Unavailable', 'headless-bridge-by-kjm' ); ?></h1>
-		<p><?php esc_html_e( 'We\'re making improvements to bring you a better experience. We\'ll be back online very soon.', 'headless-bridge-by-kjm' ); ?></p>
-		<p><?php esc_html_e( 'Thank you for your patience.', 'headless-bridge-by-kjm' ); ?></p>
-		<span class="badge">Headless Bridge by KJM</span>
+		<h1><?php esc_html_e( 'Frontend Temporarily Unavailable', 'kjm-headless-cms-gateway' ); ?></h1>
+		<p><?php esc_html_e( 'We\'re making improvements to bring you a better experience. We\'ll be back online very soon.', 'kjm-headless-cms-gateway' ); ?></p>
+		<p><?php esc_html_e( 'Thank you for your patience.', 'kjm-headless-cms-gateway' ); ?></p>
+		<span class="badge">KJM Headless CMS Gateway</span>
 	</div>
 </body>
 </html>

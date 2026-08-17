@@ -2,10 +2,10 @@
 /**
  * Admin interface — settings page, menus, and asset enqueueing.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,24 +26,24 @@ class Admin {
 		add_action( 'admin_menu',             [ $this, 'add_menu_page' ] );
 		add_action( 'admin_enqueue_scripts',  [ $this, 'enqueue_assets' ] );
 		add_action( 'admin_notices',          [ $this, 'maybe_show_notices' ] );
-		add_filter( 'plugin_action_links_' . HEADLESSBRIDGE_PLUGIN_BASENAME, [ $this, 'add_action_links' ] );
+		add_filter( 'plugin_action_links_' . KJMHCG_PLUGIN_BASENAME, [ $this, 'add_action_links' ] );
 
 		// Tools: handle form submissions.
-		add_action( 'admin_post_headlessbridge_flush_permalinks', [ $this, 'handle_flush_permalinks' ] );
-		add_action( 'admin_post_headlessbridge_export_settings',  [ $this, 'handle_export_settings' ] );
-		add_action( 'admin_post_headlessbridge_import_settings',  [ $this, 'handle_import_settings' ] );
-		add_action( 'admin_post_headlessbridge_reset_settings',   [ $this, 'handle_reset_settings' ] );
+		add_action( 'admin_post_kjmhcg_flush_permalinks', [ $this, 'handle_flush_permalinks' ] );
+		add_action( 'admin_post_kjmhcg_export_settings',  [ $this, 'handle_export_settings' ] );
+		add_action( 'admin_post_kjmhcg_import_settings',  [ $this, 'handle_import_settings' ] );
+		add_action( 'admin_post_kjmhcg_reset_settings',   [ $this, 'handle_reset_settings' ] );
 	}
 
 	/**
-	 * Register the Settings > Headless Bridge submenu.
+	 * Register the Settings > Headless CMS Gateway submenu.
 	 */
 	public function add_menu_page(): void {
 		add_options_page(
-			__( 'Headless Bridge Settings', 'headless-bridge-by-kjm' ),
-			__( 'Headless Bridge', 'headless-bridge-by-kjm' ),
+			__( 'Headless CMS Gateway Settings', 'kjm-headless-cms-gateway' ),
+			__( 'Headless CMS Gateway', 'kjm-headless-cms-gateway' ),
 			'manage_options',
-			'headless-bridge-by-kjm',
+			'kjm-headless-cms-gateway',
 			[ $this, 'render_settings_page' ]
 		);
 	}
@@ -57,67 +57,67 @@ class Admin {
 		// Dashboard widget assets.
 		if ( 'index.php' === $hook ) {
 			wp_enqueue_style(
-				'headlessbridge-admin',
-				HEADLESSBRIDGE_PLUGIN_URL . 'assets/css/admin.css',
+				'kjmhcg-admin',
+				KJMHCG_PLUGIN_URL . 'assets/css/admin.css',
 				[],
-				HEADLESSBRIDGE_VERSION
+				KJMHCG_VERSION
 			);
 			return;
 		}
 
-		if ( 'settings_page_headless-bridge-by-kjm' !== $hook ) {
+		if ( 'settings_page_kjm-headless-cms-gateway' !== $hook ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'headlessbridge-admin',
-			HEADLESSBRIDGE_PLUGIN_URL . 'assets/css/admin.css',
+			'kjmhcg-admin',
+			KJMHCG_PLUGIN_URL . 'assets/css/admin.css',
 			[],
-			HEADLESSBRIDGE_VERSION
+			KJMHCG_VERSION
 		);
 
 		wp_enqueue_script(
-			'headlessbridge-admin',
-			HEADLESSBRIDGE_PLUGIN_URL . 'assets/js/admin.js',
+			'kjmhcg-admin',
+			KJMHCG_PLUGIN_URL . 'assets/js/admin.js',
 			[ 'jquery', 'jquery-ui-sortable' ],
-			HEADLESSBRIDGE_VERSION,
+			KJMHCG_VERSION,
 			true
 		);
 
-		wp_localize_script( 'headlessbridge-admin', 'headlessbridgeAdmin', [
+		wp_localize_script( 'kjmhcg-admin', 'kjmhcgAdmin', [
 			'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
-			'healthNonce'   => wp_create_nonce( 'headlessbridge_health_nonce' ),
-			'webhooksNonce' => wp_create_nonce( 'headlessbridge_webhooks_nonce' ),
+			'healthNonce'   => wp_create_nonce( 'kjmhcg_health_nonce' ),
+			'webhooksNonce' => wp_create_nonce( 'kjmhcg_webhooks_nonce' ),
 			'i18n'          => [
-				'checking'        => __( 'Checking…', 'headless-bridge-by-kjm' ),
-				'runCheck'        => __( 'Run Check', 'headless-bridge-by-kjm' ),
-				'pass'            => __( 'Pass', 'headless-bridge-by-kjm' ),
-				'fail'            => __( 'Fail', 'headless-bridge-by-kjm' ),
-				'info'            => __( 'Info', 'headless-bridge-by-kjm' ),
-				'clearCache'      => __( 'Clear Cache', 'headless-bridge-by-kjm' ),
-				'cacheCleared'    => __( 'Cache cleared.', 'headless-bridge-by-kjm' ),
-				'error'           => __( 'An error occurred.', 'headless-bridge-by-kjm' ),
-				'save'            => __( 'Save Webhook', 'headless-bridge-by-kjm' ),
-				'saving'          => __( 'Saving…', 'headless-bridge-by-kjm' ),
-				'delete'          => __( 'Delete', 'headless-bridge-by-kjm' ),
-				'deleting'        => __( 'Deleting…', 'headless-bridge-by-kjm' ),
-				'confirmDelete'   => __( 'Delete this webhook? This cannot be undone.', 'headless-bridge-by-kjm' ),
-				'sendTest'        => __( 'Send Test', 'headless-bridge-by-kjm' ),
-				'sendingTest'     => __( 'Sending…', 'headless-bridge-by-kjm' ),
-				'testPass'        => __( 'Success', 'headless-bridge-by-kjm' ),
-				'testFail'        => __( 'Failed', 'headless-bridge-by-kjm' ),
-				'generateSecret'  => __( 'Generate', 'headless-bridge-by-kjm' ),
-				'generating'      => __( 'Generating…', 'headless-bridge-by-kjm' ),
-				'showSecret'      => __( 'Show', 'headless-bridge-by-kjm' ),
-				'hideSecret'      => __( 'Hide', 'headless-bridge-by-kjm' ),
-				'addWebhook'      => __( 'Add New Webhook', 'headless-bridge-by-kjm' ),
-				'editWebhook'     => __( 'Edit Webhook', 'headless-bridge-by-kjm' ),
-				'cancel'          => __( 'Cancel', 'headless-bridge-by-kjm' ),
-				'keepExisting'    => __( '(leave blank to keep the existing secret)', 'headless-bridge-by-kjm' ),
-				'noTriggers'      => __( 'Select at least one trigger.', 'headless-bridge-by-kjm' ),
-				'quickSetupName'  => __( 'Frontend Revalidation', 'headless-bridge-by-kjm' ),
-				'linkLabel'       => __( 'Label', 'headless-bridge-by-kjm' ),
-				'linkUrl'         => __( '/about or https://…', 'headless-bridge-by-kjm' ),
+				'checking'        => __( 'Checking…', 'kjm-headless-cms-gateway' ),
+				'runCheck'        => __( 'Run Check', 'kjm-headless-cms-gateway' ),
+				'pass'            => __( 'Pass', 'kjm-headless-cms-gateway' ),
+				'fail'            => __( 'Fail', 'kjm-headless-cms-gateway' ),
+				'info'            => __( 'Info', 'kjm-headless-cms-gateway' ),
+				'clearCache'      => __( 'Clear Cache', 'kjm-headless-cms-gateway' ),
+				'cacheCleared'    => __( 'Cache cleared.', 'kjm-headless-cms-gateway' ),
+				'error'           => __( 'An error occurred.', 'kjm-headless-cms-gateway' ),
+				'save'            => __( 'Save Webhook', 'kjm-headless-cms-gateway' ),
+				'saving'          => __( 'Saving…', 'kjm-headless-cms-gateway' ),
+				'delete'          => __( 'Delete', 'kjm-headless-cms-gateway' ),
+				'deleting'        => __( 'Deleting…', 'kjm-headless-cms-gateway' ),
+				'confirmDelete'   => __( 'Delete this webhook? This cannot be undone.', 'kjm-headless-cms-gateway' ),
+				'sendTest'        => __( 'Send Test', 'kjm-headless-cms-gateway' ),
+				'sendingTest'     => __( 'Sending…', 'kjm-headless-cms-gateway' ),
+				'testPass'        => __( 'Success', 'kjm-headless-cms-gateway' ),
+				'testFail'        => __( 'Failed', 'kjm-headless-cms-gateway' ),
+				'generateSecret'  => __( 'Generate', 'kjm-headless-cms-gateway' ),
+				'generating'      => __( 'Generating…', 'kjm-headless-cms-gateway' ),
+				'showSecret'      => __( 'Show', 'kjm-headless-cms-gateway' ),
+				'hideSecret'      => __( 'Hide', 'kjm-headless-cms-gateway' ),
+				'addWebhook'      => __( 'Add New Webhook', 'kjm-headless-cms-gateway' ),
+				'editWebhook'     => __( 'Edit Webhook', 'kjm-headless-cms-gateway' ),
+				'cancel'          => __( 'Cancel', 'kjm-headless-cms-gateway' ),
+				'keepExisting'    => __( '(leave blank to keep the existing secret)', 'kjm-headless-cms-gateway' ),
+				'noTriggers'      => __( 'Select at least one trigger.', 'kjm-headless-cms-gateway' ),
+				'quickSetupName'  => __( 'Frontend Revalidation', 'kjm-headless-cms-gateway' ),
+				'linkLabel'       => __( 'Label', 'kjm-headless-cms-gateway' ),
+				'linkUrl'         => __( '/about or https://…', 'kjm-headless-cms-gateway' ),
 			],
 		] );
 	}
@@ -127,7 +127,7 @@ class Admin {
 	 */
 	public function maybe_show_notices(): void {
 		$screen = get_current_screen();
-		if ( ! $screen || 'settings_page_headless-bridge-by-kjm' === $screen->id ) {
+		if ( ! $screen || 'settings_page_kjm-headless-cms-gateway' === $screen->id ) {
 			return;
 		}
 
@@ -135,8 +135,8 @@ class Admin {
 			echo '<div class="notice notice-warning is-dismissible"><p>';
 			echo wp_kses_post( sprintf(
 				/* translators: %s: link to settings page */
-				__( '<strong>Headless Bridge:</strong> Headless mode is active but no Frontend URL is configured. <a href="%s">Configure now</a>.', 'headless-bridge-by-kjm' ),
-				esc_url( admin_url( 'options-general.php?page=headless-bridge-by-kjm' ) )
+				__( '<strong>Headless CMS Gateway:</strong> Headless mode is active but no Frontend URL is configured. <a href="%s">Configure now</a>.', 'kjm-headless-cms-gateway' ),
+				esc_url( admin_url( 'options-general.php?page=kjm-headless-cms-gateway' ) )
 			) );
 			echo '</p></div>';
 		}
@@ -149,8 +149,8 @@ class Admin {
 	 * @return array
 	 */
 	public function add_action_links( array $links ): array {
-		$settings_link = '<a href="' . esc_url( admin_url( 'options-general.php?page=headless-bridge-by-kjm' ) ) . '">'
-			. esc_html__( 'Settings', 'headless-bridge-by-kjm' ) . '</a>';
+		$settings_link = '<a href="' . esc_url( admin_url( 'options-general.php?page=kjm-headless-cms-gateway' ) ) . '">'
+			. esc_html__( 'Settings', 'kjm-headless-cms-gateway' ) . '</a>';
 		array_unshift( $links, $settings_link );
 		return $links;
 	}
@@ -165,7 +165,7 @@ class Admin {
 		$settings = $this->settings;
 		$health   = $this->health;
 		$webhooks = $this->webhooks;
-		include HEADLESSBRIDGE_PLUGIN_DIR . 'templates/admin-page.php';
+		include KJMHCG_PLUGIN_DIR . 'templates/admin-page.php';
 	}
 
 	// -------------------------------------------------------------------------
@@ -176,14 +176,14 @@ class Admin {
 	 * Flush rewrite rules.
 	 */
 	public function handle_flush_permalinks(): void {
-		check_admin_referer( 'headlessbridge_tools_nonce' );
+		check_admin_referer( 'kjmhcg_tools_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_die( esc_html__( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		flush_rewrite_rules();
-		wp_safe_redirect( add_query_arg( [ 'page' => 'headless-bridge-by-kjm', 'tab' => 'tools', 'flushed' => '1' ], admin_url( 'options-general.php' ) ) );
+		wp_safe_redirect( add_query_arg( [ 'page' => 'kjm-headless-cms-gateway', 'tab' => 'tools', 'flushed' => '1' ], admin_url( 'options-general.php' ) ) );
 		exit;
 	}
 
@@ -191,34 +191,34 @@ class Admin {
 	 * Export all plugin settings as a JSON file download.
 	 */
 	public function handle_export_settings(): void {
-		check_admin_referer( 'headlessbridge_tools_nonce' );
+		check_admin_referer( 'kjmhcg_tools_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_die( esc_html__( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$export = [
-			'headlessbridge_version'                 => HEADLESSBRIDGE_VERSION,
-			'headlessbridge_enabled'                 => $this->settings->get( 'headlessbridge_enabled' ),
-			'headlessbridge_frontend_url'            => $this->settings->get( 'headlessbridge_frontend_url' ),
-			'headlessbridge_noindex'                 => $this->settings->get( 'headlessbridge_noindex' ),
-			'headlessbridge_preserve_slugs'          => $this->settings->get( 'headlessbridge_preserve_slugs' ),
-			'headlessbridge_post_path_prefix'        => $this->settings->get( 'headlessbridge_post_path_prefix' ),
-			'headlessbridge_disable_rss'             => $this->settings->get( 'headlessbridge_disable_rss' ),
-			'headlessbridge_disable_search'          => $this->settings->get( 'headlessbridge_disable_search' ),
-			'headlessbridge_disable_comments'        => $this->settings->get( 'headlessbridge_disable_comments' ),
-			'headlessbridge_disable_author_archives' => $this->settings->get( 'headlessbridge_disable_author_archives' ),
-			'headlessbridge_disable_date_archives'   => $this->settings->get( 'headlessbridge_disable_date_archives' ),
-			'headlessbridge_allowed_origins'         => $this->settings->get( 'headlessbridge_allowed_origins' ),
-			'headlessbridge_maintenance_mode'        => $this->settings->get( 'headlessbridge_maintenance_mode' ),
-			'headlessbridge_xmlrpc_enabled'          => $this->settings->get( 'headlessbridge_xmlrpc_enabled' ),
-			'headlessbridge_robots_txt'              => $this->settings->get( 'headlessbridge_robots_txt' ),
-			'headlessbridge_image_strategy'          => $this->settings->get( 'headlessbridge_image_strategy' ),
-			'headlessbridge_home_category'           => $this->settings->get( 'headlessbridge_home_category' ),
-			'headlessbridge_menu_items'              => $this->settings->get( 'headlessbridge_menu_items' ),
-			'headlessbridge_homepage_sections'       => $this->settings->get( 'headlessbridge_homepage_sections' ),
+			'kjmhcg_version'                 => KJMHCG_VERSION,
+			'kjmhcg_enabled'                 => $this->settings->get( 'kjmhcg_enabled' ),
+			'kjmhcg_frontend_url'            => $this->settings->get( 'kjmhcg_frontend_url' ),
+			'kjmhcg_noindex'                 => $this->settings->get( 'kjmhcg_noindex' ),
+			'kjmhcg_preserve_slugs'          => $this->settings->get( 'kjmhcg_preserve_slugs' ),
+			'kjmhcg_post_path_prefix'        => $this->settings->get( 'kjmhcg_post_path_prefix' ),
+			'kjmhcg_disable_rss'             => $this->settings->get( 'kjmhcg_disable_rss' ),
+			'kjmhcg_disable_search'          => $this->settings->get( 'kjmhcg_disable_search' ),
+			'kjmhcg_disable_comments'        => $this->settings->get( 'kjmhcg_disable_comments' ),
+			'kjmhcg_disable_author_archives' => $this->settings->get( 'kjmhcg_disable_author_archives' ),
+			'kjmhcg_disable_date_archives'   => $this->settings->get( 'kjmhcg_disable_date_archives' ),
+			'kjmhcg_allowed_origins'         => $this->settings->get( 'kjmhcg_allowed_origins' ),
+			'kjmhcg_maintenance_mode'        => $this->settings->get( 'kjmhcg_maintenance_mode' ),
+			'kjmhcg_xmlrpc_enabled'          => $this->settings->get( 'kjmhcg_xmlrpc_enabled' ),
+			'kjmhcg_robots_txt'              => $this->settings->get( 'kjmhcg_robots_txt' ),
+			'kjmhcg_image_strategy'          => $this->settings->get( 'kjmhcg_image_strategy' ),
+			'kjmhcg_home_category'           => $this->settings->get( 'kjmhcg_home_category' ),
+			'kjmhcg_menu_items'              => $this->settings->get( 'kjmhcg_menu_items' ),
+			'kjmhcg_homepage_sections'       => $this->settings->get( 'kjmhcg_homepage_sections' ),
 			// Secrets stripped — a downloadable JSON file shouldn't carry live credentials.
-			'headlessbridge_webhooks'                => array_map(
+			'kjmhcg_webhooks'                => array_map(
 				function ( array $webhook ): array {
 					$webhook['secret'] = '';
 					return $webhook;
@@ -229,7 +229,7 @@ class Admin {
 
 		nocache_headers();
 		header( 'Content-Type: application/json' );
-		header( 'Content-Disposition: attachment; filename="headlessbridge-settings-' . gmdate( 'Y-m-d' ) . '.json"' );
+		header( 'Content-Disposition: attachment; filename="kjmhcg-settings-' . gmdate( 'Y-m-d' ) . '.json"' );
 		echo wp_json_encode( $export, JSON_PRETTY_PRINT );
 		exit;
 	}
@@ -238,34 +238,34 @@ class Admin {
 	 * Import settings from an uploaded JSON file.
 	 */
 	public function handle_import_settings(): void {
-		check_admin_referer( 'headlessbridge_tools_nonce' );
+		check_admin_referer( 'kjmhcg_tools_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_die( esc_html__( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
-		if ( empty( $_FILES['headlessbridge_import_file']['tmp_name'] ) ) {
-			wp_safe_redirect( add_query_arg( [ 'page' => 'headless-bridge-by-kjm', 'tab' => 'tools', 'import_error' => '1' ], admin_url( 'options-general.php' ) ) );
+		if ( empty( $_FILES['kjmhcg_import_file']['tmp_name'] ) ) {
+			wp_safe_redirect( add_query_arg( [ 'page' => 'kjm-headless-cms-gateway', 'tab' => 'tools', 'import_error' => '1' ], admin_url( 'options-general.php' ) ) );
 			exit;
 		}
 
-		$file_path = sanitize_text_field( wp_unslash( $_FILES['headlessbridge_import_file']['tmp_name'] ) );
+		$file_path = sanitize_text_field( wp_unslash( $_FILES['kjmhcg_import_file']['tmp_name'] ) );
 		$content   = file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$data      = json_decode( $content, true );
 
 		if ( ! is_array( $data ) ) {
-			wp_safe_redirect( add_query_arg( [ 'page' => 'headless-bridge-by-kjm', 'tab' => 'tools', 'import_error' => '1' ], admin_url( 'options-general.php' ) ) );
+			wp_safe_redirect( add_query_arg( [ 'page' => 'kjm-headless-cms-gateway', 'tab' => 'tools', 'import_error' => '1' ], admin_url( 'options-general.php' ) ) );
 			exit;
 		}
 
 		$allowed_keys = [
-			'headlessbridge_enabled', 'headlessbridge_frontend_url', 'headlessbridge_noindex',
-			'headlessbridge_preserve_slugs', 'headlessbridge_post_path_prefix', 'headlessbridge_disable_rss', 'headlessbridge_disable_search',
-			'headlessbridge_disable_comments', 'headlessbridge_disable_author_archives',
-			'headlessbridge_disable_date_archives', 'headlessbridge_allowed_origins',
-			'headlessbridge_maintenance_mode', 'headlessbridge_xmlrpc_enabled', 'headlessbridge_robots_txt',
-			'headlessbridge_image_strategy', 'headlessbridge_home_category', 'headlessbridge_menu_items',
-			'headlessbridge_homepage_sections',
+			'kjmhcg_enabled', 'kjmhcg_frontend_url', 'kjmhcg_noindex',
+			'kjmhcg_preserve_slugs', 'kjmhcg_post_path_prefix', 'kjmhcg_disable_rss', 'kjmhcg_disable_search',
+			'kjmhcg_disable_comments', 'kjmhcg_disable_author_archives',
+			'kjmhcg_disable_date_archives', 'kjmhcg_allowed_origins',
+			'kjmhcg_maintenance_mode', 'kjmhcg_xmlrpc_enabled', 'kjmhcg_robots_txt',
+			'kjmhcg_image_strategy', 'kjmhcg_home_category', 'kjmhcg_menu_items',
+			'kjmhcg_homepage_sections',
 		];
 
 		foreach ( $allowed_keys as $key ) {
@@ -280,12 +280,12 @@ class Admin {
 		// template that renders for every selected trigger) instead of
 		// trusting the uploaded file's contents directly, and preserves the
 		// existing secret for a matching id.
-		if ( isset( $data['headlessbridge_webhooks'] ) && is_array( $data['headlessbridge_webhooks'] ) ) {
-			$imported = $this->webhooks->sanitize_import( $data['headlessbridge_webhooks'] );
-			update_option( 'headlessbridge_webhooks', $imported, false );
+		if ( isset( $data['kjmhcg_webhooks'] ) && is_array( $data['kjmhcg_webhooks'] ) ) {
+			$imported = $this->webhooks->sanitize_import( $data['kjmhcg_webhooks'] );
+			update_option( 'kjmhcg_webhooks', $imported, false );
 		}
 
-		wp_safe_redirect( add_query_arg( [ 'page' => 'headless-bridge-by-kjm', 'tab' => 'tools', 'imported' => '1' ], admin_url( 'options-general.php' ) ) );
+		wp_safe_redirect( add_query_arg( [ 'page' => 'kjm-headless-cms-gateway', 'tab' => 'tools', 'imported' => '1' ], admin_url( 'options-general.php' ) ) );
 		exit;
 	}
 
@@ -293,32 +293,32 @@ class Admin {
 	 * Reset all settings to their defaults.
 	 */
 	public function handle_reset_settings(): void {
-		check_admin_referer( 'headlessbridge_tools_nonce' );
+		check_admin_referer( 'kjmhcg_tools_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_die( esc_html__( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		// Require the current user's password to confirm a destructive,
 		// irreversible action — a nonce only proves the request came from
 		// this site's admin UI, not that the person at the keyboard right
 		// now intends this specific action.
-		$password     = isset( $_POST['headlessbridge_reset_password'] ) ? sanitize_text_field( wp_unslash( $_POST['headlessbridge_reset_password'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$password     = isset( $_POST['kjmhcg_reset_password'] ) ? sanitize_text_field( wp_unslash( $_POST['kjmhcg_reset_password'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$current_user = wp_get_current_user();
 
 		if ( '' === $password || ! wp_check_password( $password, $current_user->user_pass, $current_user->ID ) ) {
-			wp_safe_redirect( add_query_arg( [ 'page' => 'headless-bridge-by-kjm', 'tab' => 'tools', 'reset_error' => '1' ], admin_url( 'options-general.php' ) ) );
+			wp_safe_redirect( add_query_arg( [ 'page' => 'kjm-headless-cms-gateway', 'tab' => 'tools', 'reset_error' => '1' ], admin_url( 'options-general.php' ) ) );
 			exit;
 		}
 
 		$keys = [
-			'headlessbridge_enabled', 'headlessbridge_frontend_url', 'headlessbridge_noindex',
-			'headlessbridge_preserve_slugs', 'headlessbridge_post_path_prefix', 'headlessbridge_disable_rss', 'headlessbridge_disable_search',
-			'headlessbridge_disable_comments', 'headlessbridge_disable_author_archives',
-			'headlessbridge_disable_date_archives', 'headlessbridge_allowed_origins',
-			'headlessbridge_maintenance_mode', 'headlessbridge_xmlrpc_enabled', 'headlessbridge_robots_txt',
-			'headlessbridge_image_strategy', 'headlessbridge_home_category', 'headlessbridge_menu_items',
-			'headlessbridge_homepage_sections', 'headlessbridge_webhooks',
+			'kjmhcg_enabled', 'kjmhcg_frontend_url', 'kjmhcg_noindex',
+			'kjmhcg_preserve_slugs', 'kjmhcg_post_path_prefix', 'kjmhcg_disable_rss', 'kjmhcg_disable_search',
+			'kjmhcg_disable_comments', 'kjmhcg_disable_author_archives',
+			'kjmhcg_disable_date_archives', 'kjmhcg_allowed_origins',
+			'kjmhcg_maintenance_mode', 'kjmhcg_xmlrpc_enabled', 'kjmhcg_robots_txt',
+			'kjmhcg_image_strategy', 'kjmhcg_home_category', 'kjmhcg_menu_items',
+			'kjmhcg_homepage_sections', 'kjmhcg_webhooks',
 		];
 
 		foreach ( $keys as $key ) {
@@ -326,10 +326,10 @@ class Admin {
 		}
 
 		// Re-run activation to restore defaults.
-		require_once HEADLESSBRIDGE_PLUGIN_DIR . 'includes/class-activator.php';
+		require_once KJMHCG_PLUGIN_DIR . 'includes/class-activator.php';
 		Activator::activate();
 
-		wp_safe_redirect( add_query_arg( [ 'page' => 'headless-bridge-by-kjm', 'reset' => '1' ], admin_url( 'options-general.php' ) ) );
+		wp_safe_redirect( add_query_arg( [ 'page' => 'kjm-headless-cms-gateway', 'reset' => '1' ], admin_url( 'options-general.php' ) ) );
 		exit;
 	}
 }

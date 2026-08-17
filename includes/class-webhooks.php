@@ -4,10 +4,10 @@
  * events to arbitrary outbound webhooks (e.g. the Next.js ISR revalidation
  * endpoint, Slack, Zapier) without a separate plugin.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Webhooks {
 
 	/** Option key holding the array of configured webhook records. */
-	private const OPTION_KEY = 'headlessbridge_webhooks';
+	private const OPTION_KEY = 'kjmhcg_webhooks';
 
 	/**
 	 * Post types tracked for published/updated/trashed triggers. Filterable
@@ -50,11 +50,11 @@ class Webhooks {
 		add_action( 'update_option_blogdescription', [ $this, 'on_settings_changed' ] );
 		add_action( 'update_option_site_icon', [ $this, 'on_settings_changed' ] );
 
-		add_action( 'wp_ajax_headlessbridge_webhook_save', [ $this, 'ajax_save' ] );
-		add_action( 'wp_ajax_headlessbridge_webhook_delete', [ $this, 'ajax_delete' ] );
-		add_action( 'wp_ajax_headlessbridge_webhook_get', [ $this, 'ajax_get' ] );
-		add_action( 'wp_ajax_headlessbridge_webhook_test', [ $this, 'ajax_test' ] );
-		add_action( 'wp_ajax_headlessbridge_generate_secret', [ $this, 'ajax_generate_secret' ] );
+		add_action( 'wp_ajax_kjmhcg_webhook_save', [ $this, 'ajax_save' ] );
+		add_action( 'wp_ajax_kjmhcg_webhook_delete', [ $this, 'ajax_delete' ] );
+		add_action( 'wp_ajax_kjmhcg_webhook_get', [ $this, 'ajax_get' ] );
+		add_action( 'wp_ajax_kjmhcg_webhook_test', [ $this, 'ajax_test' ] );
+		add_action( 'wp_ajax_kjmhcg_generate_secret', [ $this, 'ajax_generate_secret' ] );
 	}
 
 	// -------------------------------------------------------------------------
@@ -68,7 +68,7 @@ class Webhooks {
 	 * @return array<string, array{label:string, type:string}>
 	 */
 	public function get_tracked_post_types(): array {
-		$tracked = apply_filters( 'headlessbridge_webhook_tracked_post_types', self::TRACKED_POST_TYPES );
+		$tracked = apply_filters( 'kjmhcg_webhook_tracked_post_types', self::TRACKED_POST_TYPES );
 
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			unset( $tracked['product'] );
@@ -88,29 +88,29 @@ class Webhooks {
 		foreach ( $this->get_tracked_post_types() as $post_type => $meta ) {
 			$triggers[ "{$post_type}_published" ] = sprintf(
 				/* translators: %s: post type label, e.g. "Post" */
-				__( '%s Published', 'headless-bridge-by-kjm' ),
+				__( '%s Published', 'kjm-headless-cms-gateway' ),
 				$meta['label']
 			);
 			$triggers[ "{$post_type}_updated" ] = sprintf(
 				/* translators: %s: post type label, e.g. "Post" */
-				__( '%s Updated', 'headless-bridge-by-kjm' ),
+				__( '%s Updated', 'kjm-headless-cms-gateway' ),
 				$meta['label']
 			);
 			$triggers[ "{$post_type}_trashed" ] = sprintf(
 				/* translators: %s: post type label, e.g. "Post" */
-				__( '%s Unpublished / Trashed', 'headless-bridge-by-kjm' ),
+				__( '%s Unpublished / Trashed', 'kjm-headless-cms-gateway' ),
 				$meta['label']
 			);
 		}
 
-		$triggers['category_created'] = __( 'Category Created', 'headless-bridge-by-kjm' );
-		$triggers['category_updated'] = __( 'Category Updated', 'headless-bridge-by-kjm' );
-		$triggers['category_deleted'] = __( 'Category Deleted', 'headless-bridge-by-kjm' );
-		$triggers['author_updated']   = __( 'Author Profile Updated', 'headless-bridge-by-kjm' );
-		$triggers['comment_posted']   = __( 'Comment Posted (approved)', 'headless-bridge-by-kjm' );
-		$triggers['settings_updated'] = __( 'Site Settings Updated', 'headless-bridge-by-kjm' );
+		$triggers['category_created'] = __( 'Category Created', 'kjm-headless-cms-gateway' );
+		$triggers['category_updated'] = __( 'Category Updated', 'kjm-headless-cms-gateway' );
+		$triggers['category_deleted'] = __( 'Category Deleted', 'kjm-headless-cms-gateway' );
+		$triggers['author_updated']   = __( 'Author Profile Updated', 'kjm-headless-cms-gateway' );
+		$triggers['comment_posted']   = __( 'Comment Posted (approved)', 'kjm-headless-cms-gateway' );
+		$triggers['settings_updated'] = __( 'Site Settings Updated', 'kjm-headless-cms-gateway' );
 
-		return apply_filters( 'headlessbridge_webhook_triggers', $triggers );
+		return apply_filters( 'kjmhcg_webhook_triggers', $triggers );
 	}
 
 	/**
@@ -312,7 +312,7 @@ class Webhooks {
 		return wp_remote_post( $url, array_merge( [
 			'blocking'  => false,
 			'timeout'   => 3,
-			'sslverify' => apply_filters( 'headlessbridge_webhook_sslverify', true, $url ),
+			'sslverify' => apply_filters( 'kjmhcg_webhook_sslverify', true, $url ),
 			'headers'   => [
 				'Content-Type'  => 'application/json',
 				'Authorization' => 'Bearer ' . $secret,
@@ -345,8 +345,8 @@ class Webhooks {
 
 		if ( null === $decoded && JSON_ERROR_NONE !== json_last_error() ) {
 			return new \WP_Error(
-				'headlessbridge_invalid_payload',
-				__( 'Payload template did not render to valid JSON.', 'headless-bridge-by-kjm' )
+				'kjmhcg_invalid_payload',
+				__( 'Payload template did not render to valid JSON.', 'kjm-headless-cms-gateway' )
 			);
 		}
 
@@ -458,7 +458,7 @@ class Webhooks {
 	public function save( array $data ) {
 		$name = sanitize_text_field( $data['name'] ?? '' );
 		if ( '' === $name ) {
-			return new \WP_Error( 'headlessbridge_missing_name', __( 'Webhook name is required.', 'headless-bridge-by-kjm' ) );
+			return new \WP_Error( 'kjmhcg_missing_name', __( 'Webhook name is required.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$triggers = array_values( array_intersect(
@@ -466,17 +466,17 @@ class Webhooks {
 			array_keys( $this->get_triggers() )
 		) );
 		if ( empty( $triggers ) ) {
-			return new \WP_Error( 'headlessbridge_missing_triggers', __( 'Select at least one trigger.', 'headless-bridge-by-kjm' ) );
+			return new \WP_Error( 'kjmhcg_missing_triggers', __( 'Select at least one trigger.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$url = esc_url_raw( (string) ( $data['url'] ?? '' ) );
 		if ( '' === $url || ! wp_http_validate_url( $url ) ) {
-			return new \WP_Error( 'headlessbridge_invalid_url', __( 'Enter a valid webhook URL.', 'headless-bridge-by-kjm' ) );
+			return new \WP_Error( 'kjmhcg_invalid_url', __( 'Enter a valid webhook URL.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$payload = trim( (string) ( $data['payload'] ?? '' ) );
 		if ( '' === $payload ) {
-			return new \WP_Error( 'headlessbridge_missing_payload', __( 'Payload template is required.', 'headless-bridge-by-kjm' ) );
+			return new \WP_Error( 'kjmhcg_missing_payload', __( 'Payload template is required.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		// Validate against every selected trigger, not just the first — a
@@ -486,8 +486,8 @@ class Webhooks {
 		foreach ( $triggers as $trigger_key ) {
 			if ( is_wp_error( $this->render_template( $payload, $this->sample_context( $trigger_key ) ) ) ) {
 				return new \WP_Error(
-					'headlessbridge_invalid_template',
-					__( 'Payload template must render to valid JSON for every selected trigger. Tags already include quotes — write "slug":{{slug}}, not "slug":"{{slug}}".', 'headless-bridge-by-kjm' )
+					'kjmhcg_invalid_template',
+					__( 'Payload template must render to valid JSON for every selected trigger. Tags already include quotes — write "slug":{{slug}}, not "slug":"{{slug}}".', 'kjm-headless-cms-gateway' )
 				);
 			}
 		}
@@ -540,7 +540,7 @@ class Webhooks {
 	 * encrypted) secret; a new id starts with no secret, same as the
 	 * previous import behavior.
 	 *
-	 * @param array<int, mixed> $raw Decoded 'headlessbridge_webhooks' from the uploaded JSON.
+	 * @param array<int, mixed> $raw Decoded 'kjmhcg_webhooks' from the uploaded JSON.
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function sanitize_import( array $raw ): array {
@@ -707,10 +707,10 @@ class Webhooks {
 	// -------------------------------------------------------------------------
 
 	public function ajax_save(): void {
-		check_ajax_referer( 'headlessbridge_webhooks_nonce', 'nonce' );
+		check_ajax_referer( 'kjmhcg_webhooks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$data   = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -732,58 +732,58 @@ class Webhooks {
 	}
 
 	public function ajax_delete(): void {
-		check_ajax_referer( 'headlessbridge_webhooks_nonce', 'nonce' );
+		check_ajax_referer( 'kjmhcg_webhooks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$id = sanitize_key( wp_unslash( $_POST['id'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( '' === $id || ! $this->delete( $id ) ) {
-			wp_send_json_error( __( 'Webhook not found.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Webhook not found.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		wp_send_json_success();
 	}
 
 	public function ajax_get(): void {
-		check_ajax_referer( 'headlessbridge_webhooks_nonce', 'nonce' );
+		check_ajax_referer( 'kjmhcg_webhooks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$id      = sanitize_key( wp_unslash( $_POST['id'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$webhook = $id ? $this->get( $id ) : null;
 
 		if ( ! $webhook ) {
-			wp_send_json_error( __( 'Webhook not found.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Webhook not found.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		wp_send_json_success( $this->redact( $webhook ) );
 	}
 
 	public function ajax_test(): void {
-		check_ajax_referer( 'headlessbridge_webhooks_nonce', 'nonce' );
+		check_ajax_referer( 'kjmhcg_webhooks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$id      = sanitize_key( wp_unslash( $_POST['id'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$webhook = $id ? $this->get( $id ) : null;
 
 		if ( ! $webhook ) {
-			wp_send_json_error( __( 'Webhook not found.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Webhook not found.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		if ( empty( $webhook['secret'] ) ) {
-			wp_send_json_error( __( 'Set a secret before testing.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Set a secret before testing.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$trigger_key = $webhook['triggers'][0] ?? null;
 		if ( ! $trigger_key ) {
-			wp_send_json_error( __( 'This webhook has no triggers configured.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'This webhook has no triggers configured.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		$context  = $this->sample_context( $trigger_key );
@@ -811,23 +811,23 @@ class Webhooks {
 		if ( $ok ) {
 			wp_send_json_success( [
 				/* translators: %d: HTTP status code */
-				'detail' => sprintf( __( 'HTTP %d', 'headless-bridge-by-kjm' ), $code ),
+				'detail' => sprintf( __( 'HTTP %d', 'kjm-headless-cms-gateway' ), $code ),
 			] );
 		}
 
 		wp_send_json_error( sprintf(
 			/* translators: 1: HTTP status code, 2: response body */
-			__( 'HTTP %1$d: %2$s', 'headless-bridge-by-kjm' ),
+			__( 'HTTP %1$d: %2$s', 'kjm-headless-cms-gateway' ),
 			$code,
 			wp_remote_retrieve_body( $response )
 		) );
 	}
 
 	public function ajax_generate_secret(): void {
-		check_ajax_referer( 'headlessbridge_webhooks_nonce', 'nonce' );
+		check_ajax_referer( 'kjmhcg_webhooks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Permission denied.', 'headless-bridge-by-kjm' ) );
+			wp_send_json_error( __( 'Permission denied.', 'kjm-headless-cms-gateway' ) );
 		}
 
 		wp_send_json_success( [ 'secret' => wp_generate_password( 32, false ) ] );

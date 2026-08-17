@@ -2,10 +2,10 @@
 /**
  * Handles frontend redirect logic when headless mode is active.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
-namespace HeadlessBridge;
+namespace KJMHCG;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,7 +47,7 @@ class Redirects {
 			return;
 		}
 
-		if ( $this->settings->is_enabled( 'headlessbridge_maintenance_mode' ) ) {
+		if ( $this->settings->is_enabled( 'kjmhcg_maintenance_mode' ) ) {
 			$this->show_maintenance();
 			return;
 		}
@@ -75,7 +75,7 @@ class Redirects {
 	private function build_destination( string $frontend_url ): string {
 		$frontend_url = rtrim( $frontend_url, '/' );
 
-		if ( ! $this->settings->is_enabled( 'headlessbridge_preserve_slugs' ) ) {
+		if ( ! $this->settings->is_enabled( 'kjmhcg_preserve_slugs' ) ) {
 			return trailingslashit( $frontend_url );
 		}
 
@@ -136,7 +136,7 @@ class Redirects {
 	 * Add X-Robots-Tag noindex header to all WordPress-generated responses.
 	 */
 	public function maybe_noindex(): void {
-		if ( $this->settings->is_enabled( 'headlessbridge_noindex' ) ) {
+		if ( $this->settings->is_enabled( 'kjmhcg_noindex' ) ) {
 			header( 'X-Robots-Tag: noindex, nofollow', true );
 		}
 	}
@@ -145,7 +145,7 @@ class Redirects {
 	 * Optionally override robots.txt output.
 	 */
 	public function maybe_override_robots(): void {
-		if ( ! $this->settings->is_enabled( 'headlessbridge_robots_txt' ) ) {
+		if ( ! $this->settings->is_enabled( 'kjmhcg_robots_txt' ) ) {
 			return;
 		}
 
@@ -166,11 +166,11 @@ class Redirects {
 		status_header( 503 );
 		nocache_headers();
 
-		$template = HEADLESSBRIDGE_PLUGIN_DIR . 'templates/maintenance.php';
+		$template = KJMHCG_PLUGIN_DIR . 'templates/maintenance.php';
 		if ( file_exists( $template ) ) {
 			include $template;
 		} else {
-			echo '<p>' . esc_html__( 'Frontend temporarily unavailable. Please try again later.', 'headless-bridge-by-kjm' ) . '</p>';
+			echo '<p>' . esc_html__( 'Frontend temporarily unavailable. Please try again later.', 'kjm-headless-cms-gateway' ) . '</p>';
 		}
 		exit;
 	}
@@ -230,7 +230,7 @@ class Redirects {
 
 		// XML-RPC.
 		if ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {
-			return ! $this->settings->is_enabled( 'headlessbridge_xmlrpc_enabled' );
+			return ! $this->settings->is_enabled( 'kjmhcg_xmlrpc_enabled' );
 		}
 
 		return false;

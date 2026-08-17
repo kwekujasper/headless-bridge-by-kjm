@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit bootstrap for Headless Bridge tests.
+ * PHPUnit bootstrap for Headless CMS Gateway tests.
  *
- * @package HeadlessBridge
+ * @package KJMHCG
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
@@ -19,7 +19,7 @@ if ( ! file_exists( "{$_tests_dir}/includes/functions.php" ) ) {
 require_once "{$_tests_dir}/includes/functions.php";
 
 function _manually_load_plugin(): void {
-	require dirname( __DIR__ ) . '/headless-bridge.php';
+	require dirname( __DIR__ ) . '/kjm-headless-cms-gateway.php';
 }
 
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );

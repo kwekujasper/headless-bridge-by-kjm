@@ -1,10 +1,10 @@
-=== Headless Bridge by KJM ===
+=== KJM Headless CMS Gateway ===
 Contributors: kwekujasper
 Tags: headless, rest-api, graphql, cors, redirect
 Requires at least: 6.5
 Tested up to: 7.0.4
 Requires PHP: 8.1
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Transform WordPress into a secure, configurable headless CMS for any modern fron
 
 == Description ==
 
-**Headless Bridge by KJM** is a production-ready plugin that converts WordPress into a powerful headless CMS while preserving full access to the REST API, GraphQL, admin, AJAX, and cron endpoints.
+**KJM Headless CMS Gateway** is a production-ready plugin that converts WordPress into a powerful headless CMS while preserving full access to the REST API, GraphQL, admin, AJAX, and cron endpoints.
 
 = Key Features =
 
@@ -45,9 +45,9 @@ Transform WordPress into a secure, configurable headless CMS for any modern fron
 
 == Installation ==
 
-1. Upload the `headless-bridge-by-kjm` folder to `/wp-content/plugins/`.
+1. Upload the `kjm-headless-cms-gateway` folder to `/wp-content/plugins/`.
 2. Activate the plugin through **Plugins > Installed Plugins**.
-3. Go to **Settings > Headless Bridge**.
+3. Go to **Settings > Headless CMS Gateway**.
 4. Enter your **Frontend URL** (e.g. `https://yoursite.com`).
 5. Enable **Headless Mode**.
 6. Optionally configure CORS origins, disable features, and run a health check.
@@ -90,6 +90,11 @@ By default XML-RPC remains enabled (useful for Jetpack and mobile apps). You can
 5. Tools — export, import, flush, and reset.
 
 == Changelog ==
+
+= 1.4.0 =
+* Renamed the plugin from "Headless Bridge by KJM" to "KJM Headless CMS Gateway" (new slug `kjm-headless-cms-gateway`, new text domain, new option/hook/CSS prefixes and PHP namespace). The name and slug better describe what the plugin does. Sites already running an earlier version keep all their settings — on activation, values stored under the previous prefixes (`headlessbridge_*`, and the original `headlesswp_*`) are migrated automatically to the new `kjmhcg_*` keys.
+* The admin settings screen now lives at **Settings > Headless CMS Gateway** (its URL slug changed with the rename — update any bookmarks).
+* Uninstall now also cleans up options left behind under the two previous prefixes, not just the current ones.
 
 = 1.3.0 =
 * Added a new **Content** settings tab that maps WordPress categories to frontend slots — no code edits or frontend redeploy needed:
@@ -151,6 +156,9 @@ By default XML-RPC remains enabled (useful for Jetpack and mobile apps). You can
 * Translation-ready (POT file included).
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Plugin renamed to "KJM Headless CMS Gateway" (new slug and menu location: Settings > Headless CMS Gateway). Your settings migrate automatically on activation — nothing to reconfigure — but re-check the settings screen at its new location and update any bookmarks.
 
 = 1.3.0 =
 Adds a new Content tab (Settings > Headless Bridge > Content) to map categories to your frontend's homepage feed, nav menu, and homepage sections — exposed over GraphQL as generalSettings.homeCategory, menuItems, and homepageSections. No existing settings are affected.
