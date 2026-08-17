@@ -4,7 +4,7 @@ Tags: headless, rest-api, graphql, cors, redirect
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.2.4
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,7 @@ Transform WordPress into a secure, configurable headless CMS for any modern fron
 * **Slug Preservation** — `/my-post` on WordPress redirects to `yourfrontend.com/my-post`
 * **SEO Protection** — `X-Robots-Tag: noindex, nofollow` header + optional robots.txt override
 * **CORS Management** — Configure allowed origins with fine-grained `Access-Control-*` headers
+* **Frontend Content Mapping** — A no-code "Content" tab that maps your WordPress categories to frontend slots: which category fills the homepage feed, a drag-ordered navigation menu of categories and custom links, and which categories appear as their own homepage sections. Exposed over GraphQL (`generalSettings.homeCategory`, `menuItems`, `homepageSections`) so you change categories in WordPress and the frontend follows — no code edits or redeploy needed
 * **Feature Toggles** — Disable RSS, search, comments, author archives, date archives
 * **Maintenance Mode** — Show a branded maintenance page when the frontend is unavailable
 * **Health Checker** — Dashboard widget that verifies REST API, GraphQL, frontend reachability, and CORS configuration
@@ -90,6 +91,14 @@ By default XML-RPC remains enabled (useful for Jetpack and mobile apps). You can
 
 == Changelog ==
 
+= 1.3.0 =
+* Added a new **Content** settings tab that maps WordPress categories to frontend slots — no code edits or frontend redeploy needed:
+  * **Homepage Category** — pick which category's posts fill the frontend homepage feed. Empty falls back to the most recent posts across all categories, so the homepage is never blank if the category is renamed or removed.
+  * **Navigation Menu** — a drag-to-order builder mixing category checkboxes and custom links (label + URL, relative or absolute). Leave everything unchecked to auto-list every category; a category with no published posts stays hidden until it has one.
+  * **Homepage Sections** — check and drag-order the categories that render as their own sections (each showing that category's latest posts) above the main feed.
+* Exposed the three mappings over GraphQL on `GeneralSettings` as `homeCategory`, `menuItems`, and `homepageSections` for the frontend to consume.
+* Uninstall now also removes the new `headlessbridge_home_category`, `headlessbridge_menu_items`, and `headlessbridge_homepage_sections` options.
+
 = 1.2.4 =
 * Fixed: text domain now matches the plugin slug (`headless-bridge-by-kjm`) everywhere — required for WordPress.org Plugin Check to pass, since translations are looked up by slug.
 * Fixed: settings page slug and its admin-page hook/links are now consistent with the plugin slug (previously a leftover `headless-bridge` reference in a couple of spots).
@@ -141,6 +150,9 @@ By default XML-RPC remains enabled (useful for Jetpack and mobile apps). You can
 * Translation-ready (POT file included).
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+Adds a new Content tab (Settings > Headless Bridge > Content) to map categories to your frontend's homepage feed, nav menu, and homepage sections — exposed over GraphQL as generalSettings.homeCategory, menuItems, and homepageSections. No existing settings are affected.
 
 = 1.2.4 =
 Settings page URL slug changed from `headless-bridge` to `headless-bridge-by-kjm` (matches the plugin's text domain now) — update any bookmarks to Settings > Headless Bridge. No settings data is affected.

@@ -3,7 +3,7 @@
  * Plugin Name:       Headless Bridge by KJM
  * Plugin URI:        https://kwekujasper.com/headless-bridge
  * Description:       Transform WordPress into a secure, configurable headless CMS for any modern frontend framework (Next.js, Nuxt, Astro, SvelteKit, and more).
- * Version:           1.2.4
+ * Version:           1.3.0
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            Kweku Jasper Media
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HEADLESSBRIDGE_VERSION', '1.2.4' );
+define( 'HEADLESSBRIDGE_VERSION', '1.3.0' );
 define( 'HEADLESSBRIDGE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HEADLESSBRIDGE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'HEADLESSBRIDGE_PLUGIN_FILE', __FILE__ );

@@ -115,7 +115,7 @@ class Settings {
 	 * their own sections (each showing a handful of that category's latest
 	 * posts), as a newline-separated string. Empty = the frontend shows no
 	 * per-category sections (just its featured + latest feed). Same storage
-	 * shape as menu_categories().
+	 * shape as menu_items().
 	 */
 	public function homepage_sections(): string {
 		$raw   = (string) $this->get( 'headlessbridge_homepage_sections', '' );

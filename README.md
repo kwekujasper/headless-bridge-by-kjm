@@ -3,7 +3,7 @@
 Transform WordPress into a secure, configurable headless CMS for any modern frontend framework (Next.js, Nuxt, Astro, SvelteKit, and more).
 
 **Author:** Kweku Jasper Media ([@kwekujasper](https://github.com/kwekujasper))
-**Requires at least:** WordPress 6.5 · **Requires PHP:** 8.1 · **Stable tag:** 1.2.4
+**Requires at least:** WordPress 6.5 · **Requires PHP:** 8.1 · **Stable tag:** 1.3.0
 **License:** [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
 
 > This is the source repository. [`readme.txt`](readme.txt) is the canonical WordPress.org-format listing; this file is a GitHub-friendly overview of the same plugin.
@@ -18,6 +18,7 @@ Transform WordPress into a secure, configurable headless CMS for any modern fron
 * **Slug Preservation** — `/my-post` on WordPress redirects to `yourfrontend.com/my-post`
 * **SEO Protection** — `X-Robots-Tag: noindex, nofollow` header + optional robots.txt override
 * **CORS Management** — Configure allowed origins with fine-grained `Access-Control-*` headers
+* **Frontend Content Mapping** — A no-code "Content" tab that maps your WordPress categories to frontend slots: which category fills the homepage feed, a drag-ordered navigation menu of categories and custom links, and which categories appear as their own homepage sections. Exposed over GraphQL (`generalSettings.homeCategory`, `menuItems`, `homepageSections`) so you change categories in WordPress and the frontend follows — no code edits or redeploy needed
 * **Feature Toggles** — Disable RSS, search, comments, author archives, date archives
 * **Maintenance Mode** — Show a branded maintenance page when the frontend is unavailable
 * **Health Checker** — Dashboard widget that verifies REST API, GraphQL, frontend reachability, and CORS configuration
@@ -85,10 +86,15 @@ By default XML-RPC remains enabled (useful for Jetpack and mobile apps). You can
 Cut a release with:
 
 ```bash
-git tag v1.2.4 && git push --tags
+git tag v1.3.0 && git push --tags
 ```
 
 ## Changelog
+
+### 1.3.0
+* Added a new **Content** settings tab that maps WordPress categories to frontend slots, with no frontend redeploy needed: a **Homepage Category** (which category's posts fill the homepage feed; empty falls back to most-recent across all categories), a drag-to-order **Navigation Menu** builder mixing category checkboxes and custom links (label + URL), and **Homepage Sections** (ordered categories each rendered as their own section of latest posts).
+* Exposed the three mappings over GraphQL on `GeneralSettings` as `homeCategory`, `menuItems`, and `homepageSections`.
+* Uninstall now also removes the new `headlessbridge_home_category`, `headlessbridge_menu_items`, and `headlessbridge_homepage_sections` options.
 
 ### 1.2.4
 * Fixed: text domain now matches the plugin slug (`headless-bridge-by-kjm`) everywhere — required for WordPress.org Plugin Check to pass, since translations are looked up by slug.

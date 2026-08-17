@@ -311,7 +311,7 @@ endif;
 										<li class="headlessbridge-cat-item hb-menu-item" data-type="link">
 											<span class="headlessbridge-cat-handle" aria-hidden="true">&#9776;</span>
 											<input type="text" class="hb-link-label" placeholder="<?php esc_attr_e( 'Label', 'headless-bridge-by-kjm' ); ?>" value="<?php echo esc_attr( $menu_item['label'] ); ?>" />
-											<input type="text" class="hb-link-url" placeholder="/about or https://…" value="<?php echo esc_attr( $menu_item['url'] ); ?>" />
+											<input type="text" class="hb-link-url" placeholder="<?php esc_attr_e( '/about or https://…', 'headless-bridge-by-kjm' ); ?>" value="<?php echo esc_attr( $menu_item['url'] ); ?>" />
 											<button type="button" class="button-link hb-link-remove" aria-label="<?php esc_attr_e( 'Remove link', 'headless-bridge-by-kjm' ); ?>">&times;</button>
 										</li>
 									<?php endif; ?>

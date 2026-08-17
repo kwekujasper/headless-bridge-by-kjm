@@ -116,6 +116,8 @@ class Admin {
 				'keepExisting'    => __( '(leave blank to keep the existing secret)', 'headless-bridge-by-kjm' ),
 				'noTriggers'      => __( 'Select at least one trigger.', 'headless-bridge-by-kjm' ),
 				'quickSetupName'  => __( 'Frontend Revalidation', 'headless-bridge-by-kjm' ),
+				'linkLabel'       => __( 'Label', 'headless-bridge-by-kjm' ),
+				'linkUrl'         => __( '/about or https://…', 'headless-bridge-by-kjm' ),
 			],
 		] );
 	}

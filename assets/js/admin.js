@@ -449,11 +449,13 @@
 		$list.on( 'change input', 'input', sync );
 
 		$wrap.on( 'click', '.hb-add-link', function () {
+			const labelPlaceholder = escHtml( ( cfg.i18n && cfg.i18n.linkLabel ) || 'Label' );
+			const urlPlaceholder   = escHtml( ( cfg.i18n && cfg.i18n.linkUrl ) || '/about or https://…' );
 			$list.append(
 				'<li class="headlessbridge-cat-item hb-menu-item" data-type="link">'
 				+ '<span class="headlessbridge-cat-handle" aria-hidden="true">&#9776;</span>'
-				+ '<input type="text" class="hb-link-label" placeholder="Label" />'
-				+ '<input type="text" class="hb-link-url" placeholder="/about or https://…" />'
+				+ '<input type="text" class="hb-link-label" placeholder="' + labelPlaceholder + '" />'
+				+ '<input type="text" class="hb-link-url" placeholder="' + urlPlaceholder + '" />'
 				+ '<button type="button" class="button-link hb-link-remove" aria-label="Remove link">&times;</button>'
 				+ '</li>'
 			);
