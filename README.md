@@ -95,6 +95,7 @@ git tag v1.3.0 && git push --tags
 * Added a new **Content** settings tab that maps WordPress categories to frontend slots, with no frontend redeploy needed: a **Homepage Category** (which category's posts fill the homepage feed; empty falls back to most-recent across all categories), a drag-to-order **Navigation Menu** builder mixing category checkboxes and custom links (label + URL), and **Homepage Sections** (ordered categories each rendered as their own section of latest posts).
 * Exposed the three mappings over GraphQL on `GeneralSettings` as `homeCategory`, `menuItems`, and `homepageSections`.
 * Uninstall now also removes the new `headlessbridge_home_category`, `headlessbridge_menu_items`, and `headlessbridge_homepage_sections` options.
+* Updated: "Tested up to" bumped to WordPress 7.0.4 (current stable).
 
 ### 1.2.4
 * Fixed: text domain now matches the plugin slug (`headless-bridge-by-kjm`) everywhere — required for WordPress.org Plugin Check to pass, since translations are looked up by slug.

@@ -2,7 +2,7 @@
 Contributors: kwekujasper
 Tags: headless, rest-api, graphql, cors, redirect
 Requires at least: 6.5
-Tested up to: 7.0
+Tested up to: 7.0.4
 Requires PHP: 8.1
 Stable tag: 1.3.0
 License: GPLv2 or later
@@ -98,6 +98,7 @@ By default XML-RPC remains enabled (useful for Jetpack and mobile apps). You can
   * **Homepage Sections** — check and drag-order the categories that render as their own sections (each showing that category's latest posts) above the main feed.
 * Exposed the three mappings over GraphQL on `GeneralSettings` as `homeCategory`, `menuItems`, and `homepageSections` for the frontend to consume.
 * Uninstall now also removes the new `headlessbridge_home_category`, `headlessbridge_menu_items`, and `headlessbridge_homepage_sections` options.
+* Updated: "Tested up to" bumped to WordPress 7.0.4 (current stable).
 
 = 1.2.4 =
 * Fixed: text domain now matches the plugin slug (`headless-bridge-by-kjm`) everywhere — required for WordPress.org Plugin Check to pass, since translations are looked up by slug.
