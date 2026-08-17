@@ -379,3 +379,95 @@
 #headlessbridge_health_widget .headlessbridge-health-item {
 	padding: 8px 12px;
 }
+
+/* ── Category picker (Content tab) ─────────────────────────────────────── */
+.headlessbridge-cat-picker {
+	margin: 0 0 6px;
+	padding: 0;
+	max-width: 440px;
+	max-height: 320px;
+	overflow-y: auto;
+	list-style: none;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.headlessbridge-cat-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0;
+	padding: 7px 10px;
+	border-bottom: 1px solid #f0f0f1;
+	background: #fff;
+}
+
+.headlessbridge-cat-item:last-child {
+	border-bottom: 0;
+}
+
+.headlessbridge-cat-handle {
+	cursor: grab;
+	color: #a7aaad;
+	font-size: 13px;
+	line-height: 1;
+	user-select: none;
+}
+
+.headlessbridge-cat-item label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
+	margin: 0;
+	cursor: pointer;
+}
+
+.headlessbridge-cat-slug {
+	margin-left: auto;
+	padding: 1px 6px;
+	color: #787c82;
+	font-size: 11px;
+	background: #f6f7f7;
+	border-radius: 3px;
+}
+
+.headlessbridge-cat-item.ui-sortable-helper {
+	box-shadow: 0 2px 10px rgba( 0, 0, 0, 0.14 );
+	border-bottom: 0;
+}
+
+.headlessbridge-cat-placeholder {
+	height: 36px;
+	margin: 0;
+	background: #f0f6fc;
+	border: 1px dashed #c3c4c7;
+}
+
+/* Menu builder: wider list so link inputs fit; custom-link rows. */
+.headlessbridge-menu-builder .headlessbridge-cat-picker {
+	max-width: 560px;
+}
+
+.headlessbridge-menu-builder .hb-add-link {
+	margin-top: 8px;
+}
+
+.hb-menu-item[data-type="link"] .hb-link-label {
+	width: 34%;
+}
+
+.hb-menu-item[data-type="link"] .hb-link-url {
+	flex: 1;
+	min-width: 0;
+}
+
+.hb-menu-item[data-type="link"] .hb-link-remove {
+	color: #b32d2e;
+	text-decoration: none;
+	font-size: 18px;
+	line-height: 1;
+	padding: 0 4px;
+	cursor: pointer;
+}

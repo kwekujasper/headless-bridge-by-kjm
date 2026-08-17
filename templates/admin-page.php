@@ -18,6 +18,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) )
 
 $tabs = [
 	'general'  => __( 'General', 'headless-bridge-by-kjm' ),
+	'content'  => __( 'Content', 'headless-bridge-by-kjm' ),
 	'seo'      => __( 'SEO', 'headless-bridge-by-kjm' ),
 	'features' => __( 'Features', 'headless-bridge-by-kjm' ),
 	'api'      => __( 'API & CORS', 'headless-bridge-by-kjm' ),
@@ -174,6 +175,164 @@ endif;
 				</tr>
 			</table>
 			<?php submit_button( __( 'Save General Settings', 'headless-bridge-by-kjm' ) ); ?>
+		</form>
+
+		<?php elseif ( 'content' === $active_tab ) : ?>
+		<form method="post" action="options.php">
+			<?php settings_fields( 'headlessbridge_content' ); ?>
+			<h2><?php esc_html_e( 'Frontend Content Mapping', 'headless-bridge-by-kjm' ); ?></h2>
+			<p class="description" style="margin-bottom:16px">
+				<?php esc_html_e( 'Map your WordPress categories to slots on the frontend. Change categories here and the frontend follows — no code edits or redeploy needed.', 'headless-bridge-by-kjm' ); ?>
+			</p>
+			<?php
+			$content_categories = get_categories( [ 'hide_empty' => false, 'orderby' => 'name' ] );
+			$content_slugs      = wp_list_pluck( $content_categories, 'slug' );
+
+			/**
+			 * Render a drag-to-order checkbox picker of categories, bound to a
+			 * hidden field that stores the checked slugs newline-separated in the
+			 * list's current order (admin.js keeps it in sync on check/drag).
+			 * Checked items are listed first in their saved order, then the rest.
+			 */
+			$render_category_picker = function ( $field_name, $saved_value, $all_categories ) {
+				$saved   = array_filter( array_map( 'trim', explode( "\n", (string) $saved_value ) ) );
+				$by_slug = [];
+				foreach ( $all_categories as $cat ) {
+					$by_slug[ $cat->slug ] = $cat;
+				}
+				$ordered = [];
+				foreach ( $saved as $slug ) {
+					if ( isset( $by_slug[ $slug ] ) ) {
+						$ordered[ $slug ] = $by_slug[ $slug ];
+					}
+				}
+				foreach ( $all_categories as $cat ) {
+					if ( ! isset( $ordered[ $cat->slug ] ) ) {
+						$ordered[ $cat->slug ] = $cat;
+					}
+				}
+
+				if ( empty( $ordered ) ) {
+					echo '<p class="description">' . esc_html__( 'No categories found yet. Create some in Posts → Categories.', 'headless-bridge-by-kjm' ) . '</p>';
+					printf( '<input type="hidden" name="%1$s" id="%1$s" value="%2$s" />', esc_attr( $field_name ), esc_attr( $saved_value ) );
+					return;
+				}
+				?>
+				<input type="hidden" name="<?php echo esc_attr( $field_name ); ?>"
+					id="<?php echo esc_attr( $field_name ); ?>"
+					value="<?php echo esc_attr( $saved_value ); ?>" />
+				<ul class="headlessbridge-cat-picker" data-target="<?php echo esc_attr( $field_name ); ?>">
+					<?php foreach ( $ordered as $slug => $cat ) : ?>
+						<li class="headlessbridge-cat-item">
+							<span class="headlessbridge-cat-handle" aria-hidden="true">&#9776;</span>
+							<label>
+								<input type="checkbox" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $saved, true ) ); ?> />
+								<span class="headlessbridge-cat-name"><?php echo esc_html( $cat->name ); ?></span>
+								<code class="headlessbridge-cat-slug"><?php echo esc_html( $slug ); ?></code>
+							</label>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+				<?php
+			};
+			?>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row">
+						<label for="headlessbridge_home_category"><?php esc_html_e( 'Homepage Category', 'headless-bridge-by-kjm' ); ?></label>
+					</th>
+					<td>
+						<?php $current_home_category = $settings->get( 'headlessbridge_home_category' ); ?>
+						<select id="headlessbridge_home_category" name="headlessbridge_home_category">
+							<option value="" <?php selected( $current_home_category, '' ); ?>>
+								<?php esc_html_e( '— Most recent posts (all categories) —', 'headless-bridge-by-kjm' ); ?>
+							</option>
+							<?php foreach ( $content_categories as $content_category ) : ?>
+								<option value="<?php echo esc_attr( $content_category->slug ); ?>" <?php selected( $current_home_category, $content_category->slug ); ?>>
+									<?php echo esc_html( $content_category->name ); ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+						<p class="description"><?php esc_html_e( 'Posts in this category fill the homepage feed. If it is empty or unset, the homepage falls back to the most recent posts across all categories, so it is never blank.', 'headless-bridge-by-kjm' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label><?php esc_html_e( 'Navigation Menu', 'headless-bridge-by-kjm' ); ?></label>
+					</th>
+					<td>
+						<?php
+						// Parse the saved menu tokens into an ordered list, then append
+						// any categories not already included (shown unchecked).
+						$menu_saved   = $settings->get( 'headlessbridge_menu_items' );
+						$menu_lines   = array_filter( array_map( 'trim', explode( "\n", (string) $menu_saved ) ) );
+						$menu_checked = [];
+						$menu_order   = [];
+						foreach ( $menu_lines as $menu_line ) {
+							if ( 0 === strpos( $menu_line, 'category:' ) ) {
+								$menu_slug                  = substr( $menu_line, strlen( 'category:' ) );
+								$menu_order[]               = [ 'type' => 'category', 'slug' => $menu_slug ];
+								$menu_checked[ $menu_slug ] = true;
+							} elseif ( 0 === strpos( $menu_line, 'link:' ) ) {
+								$menu_rest = substr( $menu_line, strlen( 'link:' ) );
+								$menu_pos  = strpos( $menu_rest, '|' );
+								if ( false !== $menu_pos ) {
+									$menu_order[] = [ 'type' => 'link', 'label' => substr( $menu_rest, 0, $menu_pos ), 'url' => substr( $menu_rest, $menu_pos + 1 ) ];
+								}
+							}
+						}
+						$menu_by_slug = [];
+						foreach ( $content_categories as $menu_cat ) {
+							$menu_by_slug[ $menu_cat->slug ] = $menu_cat;
+						}
+						foreach ( $content_categories as $menu_cat ) {
+							if ( ! isset( $menu_checked[ $menu_cat->slug ] ) ) {
+								$menu_order[] = [ 'type' => 'category', 'slug' => $menu_cat->slug, 'unchecked' => true ];
+							}
+						}
+						?>
+						<input type="hidden" name="headlessbridge_menu_items" id="headlessbridge_menu_items" value="<?php echo esc_attr( $menu_saved ); ?>" />
+						<div class="headlessbridge-menu-builder" data-target="headlessbridge_menu_items">
+							<ul class="headlessbridge-cat-picker hb-menu-list">
+								<?php foreach ( $menu_order as $menu_item ) : ?>
+									<?php if ( 'category' === $menu_item['type'] ) : ?>
+										<?php $menu_cat = $menu_by_slug[ $menu_item['slug'] ] ?? null; ?>
+										<?php if ( $menu_cat ) : ?>
+											<li class="headlessbridge-cat-item hb-menu-item" data-type="category" data-slug="<?php echo esc_attr( $menu_cat->slug ); ?>">
+												<span class="headlessbridge-cat-handle" aria-hidden="true">&#9776;</span>
+												<label>
+													<input type="checkbox" <?php checked( empty( $menu_item['unchecked'] ) ); ?> />
+													<span class="headlessbridge-cat-name"><?php echo esc_html( $menu_cat->name ); ?></span>
+													<code class="headlessbridge-cat-slug"><?php echo esc_html( $menu_cat->slug ); ?></code>
+												</label>
+											</li>
+										<?php endif; ?>
+									<?php else : ?>
+										<li class="headlessbridge-cat-item hb-menu-item" data-type="link">
+											<span class="headlessbridge-cat-handle" aria-hidden="true">&#9776;</span>
+											<input type="text" class="hb-link-label" placeholder="<?php esc_attr_e( 'Label', 'headless-bridge-by-kjm' ); ?>" value="<?php echo esc_attr( $menu_item['label'] ); ?>" />
+											<input type="text" class="hb-link-url" placeholder="/about or https://…" value="<?php echo esc_attr( $menu_item['url'] ); ?>" />
+											<button type="button" class="button-link hb-link-remove" aria-label="<?php esc_attr_e( 'Remove link', 'headless-bridge-by-kjm' ); ?>">&times;</button>
+										</li>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</ul>
+							<button type="button" class="button button-secondary hb-add-link">+ <?php esc_html_e( 'Add link', 'headless-bridge-by-kjm' ); ?></button>
+						</div>
+						<p class="description"><?php esc_html_e( 'Check the categories to show in the nav menu, add custom links (label + URL — e.g. /about or an external site), and drag everything into the order it should appear. Leave all unchecked with no links to automatically list every category. A category with no published posts stays hidden until it has one.', 'headless-bridge-by-kjm' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="headlessbridge_homepage_sections"><?php esc_html_e( 'Homepage Sections', 'headless-bridge-by-kjm' ); ?></label>
+					</th>
+					<td>
+						<?php $render_category_picker( 'headlessbridge_homepage_sections', $settings->get( 'headlessbridge_homepage_sections' ), $content_categories ); ?>
+						<p class="description"><?php esc_html_e( 'Check the categories to feature as homepage sections, and drag them into order. Each becomes its own section of that category\'s latest posts, above the main "Latest" feed. Leave all unchecked to auto-pick the top categories by post count.', 'headless-bridge-by-kjm' ); ?></p>
+					</td>
+				</tr>
+			</table>
+			<?php submit_button( __( 'Save Content Settings', 'headless-bridge-by-kjm' ) ); ?>
 		</form>
 
 		<?php elseif ( 'seo' === $active_tab ) : ?>

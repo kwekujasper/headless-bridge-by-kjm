@@ -88,6 +88,42 @@ class Settings {
 	}
 
 	/**
+	 * Return the category slug whose posts fill the frontend homepage feed,
+	 * or empty string when unset. Empty tells the frontend to fall back to
+	 * its own default (and ultimately to the most recent posts across all
+	 * categories), so the homepage is never blank if the category is renamed
+	 * or removed in WordPress.
+	 */
+	public function home_category(): string {
+		return sanitize_title( (string) $this->get( 'headlessbridge_home_category', '' ) );
+	}
+
+	/**
+	 * Return the ordered nav-menu items as a newline-separated token string
+	 * (empty = the frontend auto-lists every category, its default). Each line
+	 * is either `category:<slug>` (label resolved from the category on the
+	 * frontend) or `link:<label>|<url>` (a custom link). Stored and returned
+	 * raw; the frontend splits on newlines and parses each token. A category
+	 * whose slug no longer exists / has no posts is dropped by the frontend.
+	 */
+	public function menu_items(): string {
+		return (string) $this->get( 'headlessbridge_menu_items', '' );
+	}
+
+	/**
+	 * Return the ordered category slugs the frontend homepage should render as
+	 * their own sections (each showing a handful of that category's latest
+	 * posts), as a newline-separated string. Empty = the frontend shows no
+	 * per-category sections (just its featured + latest feed). Same storage
+	 * shape as menu_categories().
+	 */
+	public function homepage_sections(): string {
+		$raw   = (string) $this->get( 'headlessbridge_homepage_sections', '' );
+		$slugs = array_filter( array_map( 'sanitize_title', array_map( 'trim', explode( "\n", $raw ) ) ) );
+		return implode( "\n", $slugs );
+	}
+
+	/**
 	 * Register settings with WordPress Settings API (called once on init).
 	 */
 	public function register_hooks(): void {
@@ -130,6 +166,11 @@ class Settings {
 			'headlessbridge_api'      => [
 				'headlessbridge_allowed_origins' => [ 'sanitize_callback' => [ $this, 'sanitize_origins' ] ],
 			],
+			'headlessbridge_content'  => [
+				'headlessbridge_home_category'     => [ 'sanitize_callback' => 'sanitize_title' ],
+				'headlessbridge_menu_items'        => [ 'sanitize_callback' => [ $this, 'sanitize_menu_items' ] ],
+				'headlessbridge_homepage_sections' => [ 'sanitize_callback' => [ $this, 'sanitize_menu_categories' ] ],
+			],
 		];
 
 		foreach ( $groups as $group => $options ) {
@@ -164,5 +205,60 @@ class Settings {
 	 */
 	public function sanitize_image_strategy( ?string $value ): string {
 		return in_array( $value, self::IMAGE_STRATEGIES, true ) ? $value : 'native';
+	}
+
+	/**
+	 * Sanitize the newline-separated menu-category slug list.
+	 *
+	 * Like sanitize_origins(), this runs on every save of the Content group —
+	 * including with a null value for a field absent from the submitted form —
+	 * so it must tolerate null/empty input. Each line is normalized to a
+	 * category slug via sanitize_title(); blank lines are dropped.
+	 *
+	 * @param string|null $value Raw textarea input.
+	 * @return string
+	 */
+	public function sanitize_menu_categories( ?string $value ): string {
+		$lines = array_filter( array_map( 'trim', explode( "\n", (string) $value ) ) );
+		$slugs = array_filter( array_map( 'sanitize_title', $lines ) );
+		return implode( "\n", $slugs );
+	}
+
+	/**
+	 * Sanitize the ordered nav-menu token list. One item per line, each either
+	 * `category:<slug>` or `link:<label>|<url>`. Category slugs run through
+	 * sanitize_title; link labels are text-sanitized with the `|` delimiter
+	 * stripped so it can't corrupt parsing, and URLs through esc_url_raw
+	 * (relative paths like /about are preserved). Anything malformed is
+	 * dropped. Tolerates null/empty (runs on every save of the Content group).
+	 *
+	 * @param string|null $value Raw newline token list from the hidden field.
+	 * @return string
+	 */
+	public function sanitize_menu_items( ?string $value ): string {
+		$out = [];
+		foreach ( array_map( 'trim', explode( "\n", (string) $value ) ) as $line ) {
+			if ( '' === $line ) {
+				continue;
+			}
+			if ( 0 === strpos( $line, 'category:' ) ) {
+				$slug = sanitize_title( substr( $line, strlen( 'category:' ) ) );
+				if ( '' !== $slug ) {
+					$out[] = 'category:' . $slug;
+				}
+			} elseif ( 0 === strpos( $line, 'link:' ) ) {
+				$rest = substr( $line, strlen( 'link:' ) );
+				$pos  = strpos( $rest, '|' );
+				if ( false === $pos ) {
+					continue;
+				}
+				$label = str_replace( '|', '', sanitize_text_field( substr( $rest, 0, $pos ) ) );
+				$url   = esc_url_raw( trim( substr( $rest, $pos + 1 ) ) );
+				if ( '' !== $label && '' !== $url ) {
+					$out[] = 'link:' . $label . '|' . $url;
+				}
+			}
+		}
+		return implode( "\n", $out );
 	}
 }

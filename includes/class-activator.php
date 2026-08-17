@@ -78,6 +78,9 @@ class Activator {
 			'headlessbridge_xmlrpc_enabled'          => '1',
 			'headlessbridge_robots_txt'              => '0',
 			'headlessbridge_image_strategy'          => 'native',
+			'headlessbridge_home_category'           => '',
+			'headlessbridge_menu_items'              => '',
+			'headlessbridge_homepage_sections'       => '',
 			'headlessbridge_webhooks'                => [],
 		];
 

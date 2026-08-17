@@ -31,6 +31,9 @@ $option_keys = [
 	'headlessbridge_xmlrpc_enabled',
 	'headlessbridge_robots_txt',
 	'headlessbridge_image_strategy',
+	'headlessbridge_home_category',
+	'headlessbridge_menu_items',
+	'headlessbridge_homepage_sections',
 	'headlessbridge_webhooks',
 ];
 

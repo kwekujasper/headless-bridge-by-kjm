@@ -52,5 +52,35 @@ class Graphql {
 				'resolve'     => fn() => $this->settings->image_strategy(),
 			]
 		);
+
+		register_graphql_field(
+			'GeneralSettings',
+			'homeCategory',
+			[
+				'type'        => 'String',
+				'description' => __( 'Category slug whose posts fill the frontend homepage feed, or empty to use the frontend default / most-recent posts.', 'headless-bridge-by-kjm' ),
+				'resolve'     => fn() => $this->settings->home_category(),
+			]
+		);
+
+		register_graphql_field(
+			'GeneralSettings',
+			'menuItems',
+			[
+				'type'        => 'String',
+				'description' => __( 'Newline-separated, ordered nav-menu tokens for the frontend, or empty to auto-list all categories. Each line is "category:<slug>" or "link:<label>|<url>". The frontend splits on newlines and parses each token.', 'headless-bridge-by-kjm' ),
+				'resolve'     => fn() => $this->settings->menu_items(),
+			]
+		);
+
+		register_graphql_field(
+			'GeneralSettings',
+			'homepageSections',
+			[
+				'type'        => 'String',
+				'description' => __( 'Newline-separated, ordered category slugs the frontend homepage renders as their own sections, or empty for none. The frontend splits on newlines.', 'headless-bridge-by-kjm' ),
+				'resolve'     => fn() => $this->settings->homepage_sections(),
+			]
+		);
 	}
 }

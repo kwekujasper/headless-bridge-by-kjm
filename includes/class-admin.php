@@ -79,7 +79,7 @@ class Admin {
 		wp_enqueue_script(
 			'headlessbridge-admin',
 			HEADLESSBRIDGE_PLUGIN_URL . 'assets/js/admin.js',
-			[ 'jquery' ],
+			[ 'jquery', 'jquery-ui-sortable' ],
 			HEADLESSBRIDGE_VERSION,
 			true
 		);
@@ -212,6 +212,9 @@ class Admin {
 			'headlessbridge_xmlrpc_enabled'          => $this->settings->get( 'headlessbridge_xmlrpc_enabled' ),
 			'headlessbridge_robots_txt'              => $this->settings->get( 'headlessbridge_robots_txt' ),
 			'headlessbridge_image_strategy'          => $this->settings->get( 'headlessbridge_image_strategy' ),
+			'headlessbridge_home_category'           => $this->settings->get( 'headlessbridge_home_category' ),
+			'headlessbridge_menu_items'              => $this->settings->get( 'headlessbridge_menu_items' ),
+			'headlessbridge_homepage_sections'       => $this->settings->get( 'headlessbridge_homepage_sections' ),
 			// Secrets stripped — a downloadable JSON file shouldn't carry live credentials.
 			'headlessbridge_webhooks'                => array_map(
 				function ( array $webhook ): array {
@@ -259,7 +262,8 @@ class Admin {
 			'headlessbridge_disable_comments', 'headlessbridge_disable_author_archives',
 			'headlessbridge_disable_date_archives', 'headlessbridge_allowed_origins',
 			'headlessbridge_maintenance_mode', 'headlessbridge_xmlrpc_enabled', 'headlessbridge_robots_txt',
-			'headlessbridge_image_strategy',
+			'headlessbridge_image_strategy', 'headlessbridge_home_category', 'headlessbridge_menu_items',
+			'headlessbridge_homepage_sections',
 		];
 
 		foreach ( $allowed_keys as $key ) {
@@ -311,7 +315,8 @@ class Admin {
 			'headlessbridge_disable_comments', 'headlessbridge_disable_author_archives',
 			'headlessbridge_disable_date_archives', 'headlessbridge_allowed_origins',
 			'headlessbridge_maintenance_mode', 'headlessbridge_xmlrpc_enabled', 'headlessbridge_robots_txt',
-			'headlessbridge_image_strategy', 'headlessbridge_webhooks',
+			'headlessbridge_image_strategy', 'headlessbridge_home_category', 'headlessbridge_menu_items',
+			'headlessbridge_homepage_sections', 'headlessbridge_webhooks',
 		];
 
 		foreach ( $keys as $key ) {

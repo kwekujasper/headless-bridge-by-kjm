@@ -371,4 +371,101 @@
 			.replace( /'/g, '&#039;' );
 	}
 
+	// ── Category picker (Content tab: homepage sections) ─────────────
+	// A sortable <ul> of category checkboxes bound to a hidden field. On check
+	// or drag, rebuild the field value = checked slugs in the list's current
+	// order, newline-separated (the format PHP already stores). The menu list
+	// (.hb-menu-list) is excluded — it has its own builder below.
+	$( '.headlessbridge-cat-picker' ).not( '.hb-menu-list' ).each( function () {
+		const $list  = $( this );
+		const $field = $( '#' + $list.data( 'target' ) );
+
+		function sync() {
+			const slugs = [];
+			$list.find( '.headlessbridge-cat-item' ).each( function () {
+				const $cb = $( this ).find( 'input[type="checkbox"]' );
+				if ( $cb.is( ':checked' ) ) {
+					slugs.push( $cb.val() );
+				}
+			} );
+			$field.val( slugs.join( '\n' ) );
+		}
+
+		if ( $.fn.sortable ) {
+			$list.sortable( {
+				handle               : '.headlessbridge-cat-handle',
+				axis                 : 'y',
+				placeholder          : 'headlessbridge-cat-placeholder',
+				forcePlaceholderSize : true,
+				update               : sync,
+			} );
+		}
+
+		$list.on( 'change', 'input[type="checkbox"]', sync );
+		// Safety net: resync on submit in case the browser restored state.
+		$list.closest( 'form' ).on( 'submit', sync );
+	} );
+
+	// ── Menu builder (Content tab): categories + custom links, one order ──
+	// A sortable list mixing category checkboxes and custom-link rows (label +
+	// URL). On any change/drag/add/remove, rebuild the hidden field as ordered
+	// newline tokens: "category:<slug>" for checked categories, "link:<label>|
+	// <url>" for links with both fields filled. Malformed rows are skipped
+	// here and re-validated server-side.
+	$( '.headlessbridge-menu-builder' ).each( function () {
+		const $wrap  = $( this );
+		const $list  = $wrap.find( '.hb-menu-list' );
+		const $field = $( '#' + $wrap.data( 'target' ) );
+
+		function sync() {
+			const tokens = [];
+			$list.children( '.hb-menu-item' ).each( function () {
+				const $li = $( this );
+				if ( 'category' === $li.attr( 'data-type' ) ) {
+					if ( $li.find( 'input[type="checkbox"]' ).is( ':checked' ) ) {
+						tokens.push( 'category:' + $li.attr( 'data-slug' ) );
+					}
+				} else {
+					const label = ( $li.find( '.hb-link-label' ).val() || '' ).replace( /\|/g, '' ).trim();
+					const url   = ( $li.find( '.hb-link-url' ).val() || '' ).trim();
+					if ( label && url ) {
+						tokens.push( 'link:' + label + '|' + url );
+					}
+				}
+			} );
+			$field.val( tokens.join( '\n' ) );
+		}
+
+		if ( $.fn.sortable ) {
+			$list.sortable( {
+				handle               : '.headlessbridge-cat-handle',
+				axis                 : 'y',
+				placeholder          : 'headlessbridge-cat-placeholder',
+				forcePlaceholderSize : true,
+				update               : sync,
+			} );
+		}
+
+		$list.on( 'change input', 'input', sync );
+
+		$wrap.on( 'click', '.hb-add-link', function () {
+			$list.append(
+				'<li class="headlessbridge-cat-item hb-menu-item" data-type="link">'
+				+ '<span class="headlessbridge-cat-handle" aria-hidden="true">&#9776;</span>'
+				+ '<input type="text" class="hb-link-label" placeholder="Label" />'
+				+ '<input type="text" class="hb-link-url" placeholder="/about or https://…" />'
+				+ '<button type="button" class="button-link hb-link-remove" aria-label="Remove link">&times;</button>'
+				+ '</li>'
+			);
+			$list.find( '.hb-menu-item' ).last().find( '.hb-link-label' ).trigger( 'focus' );
+		} );
+
+		$wrap.on( 'click', '.hb-link-remove', function () {
+			$( this ).closest( '.hb-menu-item' ).remove();
+			sync();
+		} );
+
+		$wrap.closest( 'form' ).on( 'submit', sync );
+	} );
+
 } )( jQuery );
